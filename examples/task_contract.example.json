@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-001",
+  "user_request": "系统梳理极端天气下植被遥感监测进展，寻找研究分歧",
+  "objective": {
+    "value": "形成基于文献证据的研究进展、分歧及候选科学问题",
+    "source": "USER_CONFIRMED"
+  },
+  "deliverables": [
+    "可核验文献清单",
+    "关键研究证据矩阵",
+    "候选Gap及反证检索状态"
+  ],
+  "scope": {
+    "topic": {
+      "value": "极端天气下陆地生态系统响应与遥感监测",
+      "source": "USER_CONFIRMED"
+    },
+    "inclusions": [
+      "遥感监测及生态响应"
+    ],
+    "exclusions": []
+  },
+  "research_mode": "DEEP",
+  "inputs": {
+    "user_files": [],
+    "seed_papers": [],
+    "known_notes": []
+  },
+  "constraints": [],
+  "workspace_links": [],
+  "primary_route": "synthesize",
+  "support_routes": [
+    "acquire",
+    "understand"
+  ],
+  "permissions": {
+    "read": true,
+    "staging_write": true,
+    "formal_commit": false,
+    "destructive": false,
+    "external_transfer": false
+  },
+  "budget": {
+    "limits": {
+      "search_calls": null,
+      "fulltext_papers": null,
+      "deep_search_calls": null,
+      "wall_time_minutes": null
+    },
+    "usage": {
+      "search_calls": 0,
+      "fulltext_papers": 0,
+      "deep_search_calls": 0
+    }
+  },
+  "acceptance": [
+    "关键科学判断均有来源和材料访问范围",
+    "候选研究Gap有外部反证检索状态"
+  ],
+  "open_questions": [],
+  "readiness": "READY",
+  "task_state": "READY",
+  "plan_revision": 1,
+  "planning": {
+    "mission": "回答领域研究现状与争议",
+    "stages": [
+      {
+        "id": "stage-01",
+        "route": "acquire",
+        "goal": "获得可核验的核心文献",
+        "status": "PENDING"
+      },
+      {
+        "id": "stage-02",
+        "route": "understand",
+        "goal": "核对核心证据",
+        "status": "PENDING"
+      },
+      {
+        "id": "stage-03",
+        "route": "synthesize",
+        "goal": "综合分歧并验证候选研究空白",
+        "status": "PENDING"
+      }
+    ],
+    "current_stage": null
+  },
+  "created_at": "2026-10-13T10:00:00+08:00",
+  "updated_at": "2026-10-13T10:00:00+08:00"
+}

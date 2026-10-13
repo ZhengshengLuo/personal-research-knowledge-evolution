@@ -1,0 +1,4 @@
+jsonschema>=4.20,<5
+requests>=2.31,<3
+# Recommended for PDF first-page verification: pip install pymupdf>=1.24
+pymupdf>=1.24,<2 # Understand 原文 PDF 页面渲染和证据提取

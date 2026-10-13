@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-001",
+  "route": "acquire",
+  "stage_goal": "检索可核验的核心论文",
+  "input_refs": [],
+  "permissions": {
+    "read": true,
+    "staging_write": true,
+    "formal_commit": false,
+    "destructive": false,
+    "external_transfer": false
+  },
+  "expected_outputs": [
+    "候选论文清单",
+    "检索记录"
+  ],
+  "acceptance": [
+    "每篇的身份及来源可核验"
+  ],
+  "evidence_requirements": [
+    "标记访问材料层级"
+  ]
+}

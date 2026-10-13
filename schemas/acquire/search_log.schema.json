@@ -1,0 +1,105 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "executed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "query_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "query_kind": {
+            "enum": [
+              "BOOLEAN",
+              "SEMANTIC",
+              "DEEP_GOAL",
+              "AUTHOR",
+              "CITATION",
+              "METADATA"
+            ]
+          },
+          "status": {
+            "enum": [
+              "COMPLETED",
+              "RUNNING",
+              "FAILED",
+              "SKIPPED"
+            ]
+          },
+          "result_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "visible_count": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "external_job_ref": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "applied_filters": {
+            "type": "object"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_id",
+          "source",
+          "executed_at",
+          "query_text",
+          "query_kind",
+          "status",
+          "result_count",
+          "visible_count",
+          "applied_filters",
+          "limitations"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "runs"
+  ]
+}

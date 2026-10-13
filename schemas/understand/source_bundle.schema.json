@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schemas/understand/source_bundle.schema.json",
+  "$comment": "PRKE staging metadata; deterministic validation does not prove academic truth",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "paper_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pdf_path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "page_count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "doi": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "text_chars": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "text_quality": {
+          "enum": [
+            "TEXT_EXTRACTED",
+            "TEXT_LIMITED"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "pdf_path",
+        "sha256",
+        "page_count",
+        "doi",
+        "title",
+        "text_chars",
+        "text_quality",
+        "created_at"
+      ]
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "text": {
+            "type": "string"
+          },
+          "width": {
+            "type": "number"
+          },
+          "height": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "page",
+          "text",
+          "width",
+          "height"
+        ]
+      }
+    },
+    "rendered_pages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "page",
+          "path"
+        ]
+      }
+    },
+    "render_quality": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "dpi": {
+          "type": "integer",
+          "minimum": 72,
+          "maximum": 300
+        },
+        "status": {
+          "enum": [
+            "NOT_RENDERED",
+            "ALL_PAGES_RENDERED_NOT_VISUALLY_CHECKED"
+          ]
+        }
+      },
+      "required": [
+        "dpi",
+        "status"
+      ]
+    },
+    "supplements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "pdf_path",
+          "sha256",
+          "page_count",
+          "rendered_pages",
+          "relevance_status"
+        ],
+        "properties": {
+          "pdf_path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "page_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rendered_pages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "page",
+                "path"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "page": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          },
+          "relevance_status": {
+            "enum": [
+              "UNASSESSED",
+              "RELEVANT_VISUALLY_CHECKED",
+              "NOT_REQUIRED_FOR_CENTRAL_CLAIMS",
+              "RELEVANT_NOT_VERIFIED"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "paper_id",
+    "source",
+    "pages",
+    "rendered_pages",
+    "render_quality",
+    "supplements"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,220 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "authors": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "year": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1800,
+            "maximum": 2100
+          },
+          "venue": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "doi": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "publication_type": {
+            "enum": [
+              "JOURNAL",
+              "CONFERENCE",
+              "REVIEW",
+              "PREPRINT",
+              "THESIS",
+              "DATASET",
+              "OTHER",
+              "UNKNOWN"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "tool": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "query_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "provider_ref": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "retrieved_at": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "tool",
+                "query_id",
+                "retrieved_at"
+              ]
+            }
+          },
+          "screening": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "decision": {
+                "enum": [
+                  "INCLUDE",
+                  "MAYBE",
+                  "EXCLUDE"
+                ]
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "decision",
+              "reason"
+            ]
+          },
+          "verification": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "bibliography": {
+                "enum": [
+                  "DISCOVERED",
+                  "CROSSCHECKED",
+                  "CONFLICT",
+                  "UNKNOWN"
+                ]
+              },
+              "bibliographic_sources": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "fulltext": {
+                "enum": [
+                  "NOT_CHECKED",
+                  "AVAILABLE",
+                  "ACCESSED",
+                  "UNAVAILABLE"
+                ]
+              },
+              "read_scope": {
+                "enum": [
+                  "METADATA_ONLY",
+                  "ABSTRACT_READ",
+                  "FULLTEXT_ACCESSED"
+                ]
+              },
+              "claim_evidence": {
+                "enum": [
+                  "NOT_CHECKED",
+                  "PARTIALLY_CHECKED",
+                  "CHECKED"
+                ]
+              }
+            },
+            "required": [
+              "bibliography",
+              "bibliographic_sources",
+              "fulltext",
+              "read_scope",
+              "claim_evidence"
+            ]
+          },
+          "relevance_reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recommended_for": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "record_id",
+          "title",
+          "authors",
+          "year",
+          "doi",
+          "publication_type",
+          "sources",
+          "screening",
+          "verification",
+          "relevance_reason",
+          "recommended_for"
+        ]
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "generated_at",
+    "papers",
+    "limitations"
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_stage": {
+      "enum": [
+        "EXPLORATORY",
+        "DEEPENING",
+        "TARGETED"
+      ]
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "branch_id",
+          "description",
+          "supporting_paper_ids",
+          "confidence",
+          "reading_priority"
+        ],
+        "properties": {
+          "branch_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "supporting_paper_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidence": {
+            "enum": [
+              "TENTATIVE",
+              "SUPPORTED",
+              "UNVERIFIED"
+            ]
+          },
+          "reading_priority": {
+            "enum": [
+              "HIGH",
+              "MEDIUM",
+              "LOW"
+            ]
+          }
+        }
+      }
+    },
+    "uncertainties": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "next_question": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "research_stage",
+    "branches",
+    "uncertainties"
+  ]
+}

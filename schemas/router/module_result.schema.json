@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schema/module_result/1.0",
+  "title": "module_result",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "route": {
+      "type": "string",
+      "enum": [
+        "acquire",
+        "understand",
+        "organize",
+        "synthesize"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "COMPLETED",
+        "PARTIAL",
+        "BLOCKED"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "source_provenance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "access_scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "METADATA_ONLY",
+          "ABSTRACT_READ",
+          "FULLTEXT_ACCESSED"
+        ]
+      }
+    },
+    "verified_items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "open_issues": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "suggested_next_actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "replan_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "route",
+    "status",
+    "artifacts",
+    "source_provenance",
+    "access_scope",
+    "verified_items",
+    "open_issues",
+    "suggested_next_actions"
+  ]
+}

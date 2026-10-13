@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schemas/understand/claim_evidence_matrix.schema.json",
+  "$comment": "PRKE staging metadata; deterministic validation does not prove academic truth",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "paper_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "claim_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "central": {
+            "type": "boolean"
+          },
+          "role": {
+            "enum": [
+              "AUTHOR_OBSERVATION",
+              "AUTHOR_INTERPRETATION",
+              "AGENT_ANALYSIS",
+              "HYPOTHESIS"
+            ]
+          },
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "evidence_summary": {
+            "type": "string"
+          },
+          "reasoning": {
+            "type": "string"
+          },
+          "assessment": {
+            "enum": [
+              "SUPPORTED",
+              "QUALIFIED",
+              "CONTRADICTED",
+              "NOT_ASSESSABLE"
+            ]
+          },
+          "source_refs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "source_kind": {
+                  "enum": [
+                    "PDF",
+                    "PDF_IMAGE",
+                    "EXTERNAL",
+                    "SUPPLEMENT"
+                  ]
+                },
+                "page": {
+                  "anyOf": [
+                    {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "figure_id": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "locator": {
+                  "anyOf": [
+                    {
+                      "type": "string"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "source_kind",
+                "page",
+                "figure_id",
+                "locator"
+              ]
+            }
+          }
+        },
+        "required": [
+          "claim_id",
+          "central",
+          "role",
+          "claim",
+          "evidence_summary",
+          "reasoning",
+          "assessment",
+          "source_refs"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "paper_id",
+    "claims"
+  ],
+  "additionalProperties": false
+}

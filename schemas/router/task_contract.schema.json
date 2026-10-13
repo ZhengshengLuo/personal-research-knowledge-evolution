@@ -1,0 +1,471 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schema/task_contract/1.0",
+  "title": "task_contract",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{6,100}$"
+    },
+    "user_request": {
+      "type": "string",
+      "minLength": 1
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "USER_CONFIRMED",
+            "INFERRED_FROM_CONTEXT",
+            "ASSUMED"
+          ]
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "value",
+        "source"
+      ]
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "topic": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "value": {
+              "type": "string",
+              "minLength": 1
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "USER_CONFIRMED",
+                "INFERRED_FROM_CONTEXT",
+                "ASSUMED"
+              ]
+            },
+            "rationale": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "value",
+            "source"
+          ]
+        },
+        "inclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "topic",
+        "inclusions",
+        "exclusions"
+      ]
+    },
+    "research_mode": {
+      "type": "string",
+      "enum": [
+        "QUICK",
+        "FOCUSED",
+        "DEEP",
+        "SYSTEMATIC"
+      ]
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "user_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "seed_papers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "known_notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "user_files",
+        "seed_papers",
+        "known_notes"
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "USER_CONFIRMED",
+              "INFERRED_FROM_CONTEXT",
+              "ASSUMED"
+            ]
+          },
+          "rationale": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "source"
+        ]
+      }
+    },
+    "workspace_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "workspace_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "PRIMARY",
+              "RELATED",
+              "METHOD_REFERENCE"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "USER_CONFIRMED",
+              "INFERRED_FROM_CONTEXT",
+              "ASSUMED"
+            ]
+          },
+          "durability": {
+            "type": "string",
+            "enum": [
+              "TASK_CONTEXT_ONLY",
+              "PROPOSED_PERMANENT",
+              "COMMITTED"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "workspace_id",
+          "role",
+          "source",
+          "durability",
+          "rationale"
+        ]
+      }
+    },
+    "primary_route": {
+      "type": "string",
+      "enum": [
+        "acquire",
+        "understand",
+        "organize",
+        "synthesize"
+      ]
+    },
+    "support_routes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "acquire",
+          "understand",
+          "organize",
+          "synthesize"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "read": {
+          "type": "boolean"
+        },
+        "staging_write": {
+          "type": "boolean"
+        },
+        "formal_commit": {
+          "type": "boolean"
+        },
+        "destructive": {
+          "type": "boolean"
+        },
+        "external_transfer": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "read",
+        "staging_write",
+        "formal_commit",
+        "destructive"
+      ]
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "limits": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "search_calls": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "fulltext_papers": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "deep_search_calls": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "wall_time_minutes": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          "required": [
+            "search_calls",
+            "fulltext_papers",
+            "deep_search_calls",
+            "wall_time_minutes"
+          ]
+        },
+        "usage": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "search_calls": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "fulltext_papers": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "deep_search_calls": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "required": [
+            "search_calls",
+            "fulltext_papers",
+            "deep_search_calls"
+          ]
+        }
+      },
+      "required": [
+        "limits",
+        "usage"
+      ]
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "readiness": {
+      "type": "string",
+      "enum": [
+        "CLARIFYING",
+        "READY"
+      ]
+    },
+    "task_state": {
+      "type": "string",
+      "enum": [
+        "CLARIFYING",
+        "READY",
+        "PLANNING",
+        "RUNNING",
+        "WAITING",
+        "REPLANNING",
+        "VALIDATING",
+        "COMPLETED",
+        "PARTIAL",
+        "BLOCKED",
+        "CANCELLED"
+      ]
+    },
+    "plan_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "planning": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mission": {
+          "type": "string",
+          "minLength": 1
+        },
+        "stages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "route": {
+                "type": "string",
+                "enum": [
+                  "acquire",
+                  "understand",
+                  "organize",
+                  "synthesize"
+                ]
+              },
+              "goal": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "PENDING",
+                  "ACTIVE",
+                  "COMPLETE",
+                  "BLOCKED"
+                ]
+              }
+            },
+            "required": [
+              "id",
+              "route",
+              "goal",
+              "status"
+            ]
+          }
+        },
+        "current_stage": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "mission",
+        "stages",
+        "current_stage"
+      ]
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "user_request",
+    "objective",
+    "deliverables",
+    "scope",
+    "research_mode",
+    "inputs",
+    "constraints",
+    "workspace_links",
+    "primary_route",
+    "support_routes",
+    "permissions",
+    "budget",
+    "acceptance",
+    "open_questions",
+    "readiness",
+    "task_state",
+    "plan_revision",
+    "planning",
+    "created_at",
+    "updated_at"
+  ]
+}

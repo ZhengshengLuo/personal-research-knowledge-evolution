@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schemas/understand/comparison_matrix.schema.json",
+  "$comment": "PRKE staging metadata; deterministic validation does not prove academic truth",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "paper_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "record_dir": {
+            "type": "string",
+            "minLength": 1
+          },
+          "primary_type": {
+            "enum": [
+              "REVIEW",
+              "SCIENTIFIC",
+              "METHOD",
+              "DATA_RESOURCE"
+            ]
+          },
+          "reading_depth": {
+            "enum": [
+              "SCAN",
+              "FOCUSED",
+              "DEEP"
+            ]
+          },
+          "audit_status": {
+            "enum": [
+              "COMPLETED",
+              "PARTIAL"
+            ]
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "paper_id",
+          "record_dir",
+          "primary_type",
+          "reading_depth",
+          "audit_status",
+          "source_sha256"
+        ]
+      }
+    },
+    "dimensions": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "divergences": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "external_checks": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "interpretation_scope": {
+      "enum": [
+        "SELECTED_PAPERS_ONLY"
+      ]
+    },
+    "status": {
+      "enum": [
+        "DRAFT_NOT_COMPARATIVELY_VERIFIED",
+        "COMPARISON_REVIEWED",
+        "PARTIAL"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "question",
+    "papers",
+    "dimensions",
+    "divergences",
+    "external_checks",
+    "interpretation_scope",
+    "status"
+  ],
+  "additionalProperties": false
+}

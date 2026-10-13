@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schemas/understand/figure_inventory.schema.json",
+  "$comment": "PRKE staging metadata; deterministic validation does not prove academic truth",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "paper_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "all_main_figures_accounted_for": {
+      "type": "boolean"
+    },
+    "visual_reconciliation_note": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "figure_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "FIGURE",
+              "TABLE",
+              "SUPPLEMENT_FIGURE",
+              "SUPPLEMENT_TABLE"
+            ]
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "candidate_pages": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "page": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "PENDING_VISUAL",
+              "VISUALLY_CHECKED",
+              "TEXT_ONLY",
+              "UNREADABLE",
+              "NOT_AVAILABLE"
+            ]
+          },
+          "rendered_asset": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "visual_observation": {
+            "type": "string"
+          },
+          "claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "checked_by": {
+            "anyOf": [
+              {
+                "enum": [
+                  "AGENT_VISUAL_INSPECTION",
+                  "USER"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "checked_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "figure_id",
+          "kind",
+          "label",
+          "candidate_pages",
+          "page",
+          "status",
+          "rendered_asset",
+          "visual_observation",
+          "claim_ids",
+          "checked_by",
+          "checked_at"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "paper_id",
+    "all_main_figures_accounted_for",
+    "visual_reconciliation_note",
+    "items"
+  ],
+  "additionalProperties": false
+}

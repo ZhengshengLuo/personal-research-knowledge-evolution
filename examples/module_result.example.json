@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-001",
+  "route": "acquire",
+  "status": "PARTIAL",
+  "artifacts": [
+    "staging/example/candidates.json"
+  ],
+  "source_provenance": [],
+  "access_scope": [
+    "METADATA_ONLY"
+  ],
+  "verified_items": [],
+  "open_issues": [
+    "示例未执行真实论文检索"
+  ],
+  "suggested_next_actions": [
+    "连接合法可用学术检索来源"
+  ],
+  "replan_reason": null
+}

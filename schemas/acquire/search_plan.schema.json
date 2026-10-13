@@ -1,0 +1,259 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "mode": {
+      "enum": [
+        "QUICK",
+        "FOCUSED",
+        "DEEP",
+        "SYSTEMATIC"
+      ]
+    },
+    "deliverable": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "inclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "publication_from": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1800,
+          "maximum": 2100
+        },
+        "publication_to": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1800,
+          "maximum": 2100
+        },
+        "source_preferences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "inclusions",
+        "exclusions"
+      ]
+    },
+    "concept_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "concept": {
+            "type": "string",
+            "minLength": 1
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "rationale": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "concept",
+          "terms"
+        ]
+      },
+      "minItems": 1
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "planned": {
+            "type": "boolean"
+          },
+          "reason": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "source",
+          "planned"
+        ]
+      }
+    },
+    "queries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "query_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "query_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "query_kind": {
+            "enum": [
+              "BOOLEAN",
+              "SEMANTIC",
+              "DEEP_GOAL",
+              "AUTHOR",
+              "CITATION",
+              "METADATA"
+            ]
+          },
+          "filters": {
+            "type": "object"
+          },
+          "rationale": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "query_id",
+          "source",
+          "query_text",
+          "query_kind",
+          "filters"
+        ]
+      }
+    },
+    "inclusion_rules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "exclusion_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "fulltext_goal": {
+      "enum": [
+        "NONE",
+        "AVAILABILITY",
+        "ACCESS_IF_AUTHORIZED"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "search_calls": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "deep_search_calls": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "candidate_target": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      },
+      "required": []
+    },
+    "protocol_status": {
+      "enum": [
+        "EXPLORATORY",
+        "DRAFT",
+        "FROZEN",
+        "AMENDED"
+      ]
+    },
+    "protocol_revision": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "goal",
+    "mode",
+    "deliverable",
+    "scope",
+    "concept_groups",
+    "sources",
+    "queries",
+    "inclusion_rules",
+    "exclusion_rules",
+    "fulltext_goal",
+    "limits",
+    "protocol_status",
+    "protocol_revision",
+    "assumptions",
+    "open_questions"
+  ]
+}

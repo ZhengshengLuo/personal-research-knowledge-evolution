@@ -1,0 +1,22 @@
+/* PRKE A+B · optional Obsidian CSS snippet · keeps Markdown fully readable without CSS.
+   Enable manually under Settings > Appearance > CSS snippets. */
+.theme-light .prke-academic {
+  --prke-ink:#253d35; --prke-line:#dce4db; --prke-soft:#f5f8f4;
+}
+.theme-dark .prke-academic {
+  --prke-ink:#bfd9cb; --prke-line:#40544b; --prke-soft:#29372f;
+}
+.prke-academic.markdown-preview-view .markdown-preview-sizer,
+.prke-academic.markdown-source-view .cm-contentContainer {max-width: 900px;}
+.prke-academic :is(h1,h2,h3){color:var(--prke-ink);letter-spacing:-.015em;}
+.prke-academic h1{font-size:1.8em;line-height:1.26;font-weight:700;}
+.prke-academic h2{margin-top:1.65em;border-bottom:1px solid var(--prke-line);padding-bottom:.35em;}
+.prke-academic p,.prke-academic li{line-height:1.8;}
+.prke-academic .callout{border-left-width:3px;border-radius:7px;}
+.theme-light .prke-studio{--prke-studio-accent:#32628c;--prke-studio-line:#e0e9f1;}
+.theme-dark .prke-studio{--prke-studio-accent:#9fc4e7;--prke-studio-line:#3a5061;}
+.prke-studio h1,.prke-studio h2{color:var(--prke-studio-accent);}
+.prke-studio h2{border-bottom:1px solid var(--prke-studio-line);padding-bottom:.3em;margin-top:1.45em;}
+.prke-studio .callout{border-radius:8px;border:1px solid var(--prke-studio-line);}
+.prke-academic img,.prke-studio img{max-width:100%;object-fit:contain;}
+@media (max-width:650px){.prke-academic h1{font-size:1.45em;}}

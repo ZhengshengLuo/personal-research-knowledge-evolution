@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "proposal_id": "wp-example-writing",
+  "action": "CREATE",
+  "candidate_name": "学术写作方法（示例）",
+  "kind": "PRACTICE",
+  "scope_in": [
+    "学术写作与论证结构"
+  ],
+  "scope_out": [
+    "特定研究方向的论文事实"
+  ],
+  "reason": "当多项任务持续产生独立写作方法知识时可考虑单独组织",
+  "overlap_with_existing": [],
+  "asset_impact_preview": [],
+  "relation_changes_preview": [],
+  "status": "PROPOSED",
+  "user_approval_ref": null
+}

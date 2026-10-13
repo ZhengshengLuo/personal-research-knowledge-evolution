@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.2",
+  "description": "PRKE 四业务路由均已接入指令；Synthesize 可在本地创建证据综合候选与 Gap Evolution 批次。外部检索、科学人工核验、Zotero 连接和 Windows 后台需现场实际验证。",
+  "modules": {
+    "acquire": {
+      "status": "INSTRUCTION_READY",
+      "implementation_ref": "routes/acquire.md",
+      "execution_mode": "HOST_AGENT_WITH_AVAILABLE_TOOLS",
+      "guarantees_tool_access": false
+    },
+    "understand": {
+      "status": "INSTRUCTION_READY",
+      "implementation_ref": "routes/understand.md",
+      "execution_mode": "HOST_AGENT_WITH_LOCAL_PDF_EVIDENCE_HELPERS",
+      "guarantees_tool_access": false,
+      "formal_vault_write": false
+    },
+    "organize": {
+      "status": "INSTRUCTION_READY",
+      "implementation_ref": "routes/organize.md",
+      "execution_mode": "HOST_AGENT_WITH_ZOTERO_READONLY_AND_LOCAL_OBSIDIAN_CLI",
+      "guarantees_tool_access": false,
+      "zotero_write": false,
+      "vault_write": "EXPLICIT_BATCH_APPROVAL_REQUIRED"
+    },
+    "synthesize": {
+      "status": "INSTRUCTION_READY",
+      "implementation_ref": "routes/synthesize.md",
+      "execution_mode": "HOST_SCIENTIFIC_AGENT_WITH_LOCAL_EVIDENCE_ENVELOPE",
+      "guarantees_tool_access": false,
+      "vault_write": "EXPLICIT_BATCH_APPROVAL_REQUIRED",
+      "independent_scientific_verification": false,
+      "automatic_external_search_in_cli": false
+    }
+  }
+}

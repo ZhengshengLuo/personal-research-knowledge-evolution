@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-acquire",
+  "generated_at": "2026-10-13T00:00:00+00:00",
+  "papers": [
+    {
+      "record_id": "demo-001",
+      "title": "DEMONSTRATION RECORD — NOT A REAL PAPER",
+      "authors": [],
+      "year": null,
+      "venue": null,
+      "doi": null,
+      "url": null,
+      "publication_type": "UNKNOWN",
+      "sources": [
+        {
+          "tool": "SAMPLE_ONLY",
+          "query_id": "q1",
+          "provider_ref": null,
+          "retrieved_at": "2026-10-13T00:00:00+00:00"
+        }
+      ],
+      "screening": {
+        "decision": "MAYBE",
+        "reason": "演示占位记录，不参与真实科学结论"
+      },
+      "verification": {
+        "bibliography": "UNKNOWN",
+        "bibliographic_sources": [],
+        "fulltext": "NOT_CHECKED",
+        "read_scope": "METADATA_ONLY",
+        "claim_evidence": "NOT_CHECKED"
+      },
+      "relevance_reason": "仅用于校验代码与数据格式，必须在实际检索时删除",
+      "recommended_for": [],
+      "notes": "DO NOT CITE / NOT REAL"
+    }
+  ],
+  "limitations": [
+    "演示文件包含虚构占位条目，不能用作论文推荐或文献证据"
+  ]
+}

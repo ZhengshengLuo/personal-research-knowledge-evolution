@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "topic_id": "Synthetic-Topic-DO-NOT-IMPORT",
+  "research_question": "How does a synthetic test stressor relate to an invented vegetation outcome?",
+  "mode": "FOCUSED_SYNTHESIS",
+  "papers": [
+    {
+      "paper_uid": "SYNTHETIC-PAPER-1-NOT-REAL",
+      "source_type": "PEER_REVIEWED_FULLTEXT",
+      "source_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "source_independence_key": "SIMULATED-EXPERIMENT-ONE",
+      "claims": [
+        {
+          "claim_id": "TEST-C1",
+          "statement": "Synthetic evidence, not an actual scientific result",
+          "source_locator": "SYNTHETIC PDF p.1 Figure Test",
+          "question_dimension": "Synthetic vegetation timing",
+          "study_context": "Synthetic vegetation group",
+          "study_design": "Synthetic illustrative observational design",
+          "estimate_target": "Synthetic association only",
+          "spatiotemporal_support": "Synthetic unit",
+          "evidence_kind": "FULLTEXT_FIGURE",
+          "stance": "UNCLEAR",
+          "verification_level": "SYNTHETIC_FIXTURE"
+        }
+      ]
+    }
+  ],
+  "scientific_findings": [
+    {
+      "finding_id": "SYNTHETIC-F1",
+      "statement": "Placeholder solely for interface testing. No actual literature claim.",
+      "evidence_refs": ["SYNTHETIC-PAPER-1-NOT-REAL#TEST-C1"],
+      "boundary": "Synthetic fixture; never publish as scientific evidence",
+      "epistemic_label": "AGENT_SYNTHESIS_DRAFT"
+    }
+  ],
+  "candidate_gaps": []
+}

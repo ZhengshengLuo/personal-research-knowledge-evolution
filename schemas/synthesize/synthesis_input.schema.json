@@ -1,0 +1,209 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PRKE Synthesis Input v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "topic_id",
+    "research_question",
+    "mode",
+    "papers"
+  ],
+  "properties": {
+    "topic_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "research_question": {
+      "type": "string",
+      "minLength": 5
+    },
+    "mode": {
+      "enum": [
+        "TOPIC_INCREMENTAL",
+        "FOCUSED_SYNTHESIS",
+        "SYSTEMATIC_REVIEW"
+      ]
+    },
+    "papers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "paper_uid",
+          "source_type",
+          "claims"
+        ],
+        "properties": {
+          "paper_uid": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_type": {
+            "enum": [
+              "PEER_REVIEWED_FULLTEXT",
+              "ABSTRACT_ONLY",
+              "METADATA_ONLY",
+              "PREPRINT",
+              "INTERNAL_EXPERIMENT"
+            ]
+          },
+          "source_sha256": {
+            "type": "string"
+          },
+          "source_independence_key": {
+            "type": "string"
+          },
+          "experiment_run_id": {
+            "type": "string"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "claim_id",
+                "statement",
+                "source_locator",
+                "question_dimension",
+                "study_context",
+                "study_design",
+                "evidence_kind",
+                "stance"
+              ],
+              "properties": {
+                "claim_id": {
+                  "type": "string"
+                },
+                "statement": {
+                  "type": "string"
+                },
+                "source_locator": {
+                  "type": "string"
+                },
+                "question_dimension": {
+                  "type": "string"
+                },
+                "study_context": {
+                  "type": "string"
+                },
+                "study_design": {
+                  "type": "string"
+                },
+                "evidence_kind": {
+                  "type": "string"
+                },
+                "stance": {
+                  "enum": [
+                    "SUPPORTS",
+                    "CHALLENGES",
+                    "CONTEXT_ONLY",
+                    "UNCLEAR"
+                  ]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "candidate_gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "gap_id",
+          "statement",
+          "evidence_refs"
+        ],
+        "properties": {
+          "gap_id": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "verification": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "review_protocol": {
+      "type": "object"
+    },
+    "scientific_findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "finding_id",
+          "statement",
+          "evidence_refs",
+          "boundary",
+          "epistemic_label"
+        ],
+        "properties": {
+          "finding_id": {
+            "type": "string"
+          },
+          "statement": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "boundary": {
+            "type": "string"
+          },
+          "epistemic_label": {
+            "enum": [
+              "AGENT_SYNTHESIS_DRAFT",
+              "EVIDENCE_INSUFFICIENT"
+            ]
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "disagreements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "question_dimension",
+          "evidence_refs",
+          "interpretation"
+        ],
+        "properties": {
+          "question_dimension": {
+            "type": "string"
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "interpretation": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  }
+}

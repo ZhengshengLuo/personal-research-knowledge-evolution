@@ -1,0 +1,11 @@
+{
+  "schema_version": "1.0",
+  "task_id": "demo-no-real-sources",
+  "generated_at": "2026-10-13T00:00:00Z",
+  "channel": "AUTO_FETCH",
+  "execute": false,
+  "items": [],
+  "notes": [
+    "仅示例"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schema/workspace_proposal/1.0",
+  "title": "workspace_proposal",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "proposal_id": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "CREATE",
+        "RENAME",
+        "MERGE",
+        "SPLIT",
+        "ARCHIVE",
+        "REACTIVATE"
+      ]
+    },
+    "candidate_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "RESEARCH_DOMAIN",
+        "METHOD",
+        "PRACTICE",
+        "OTHER"
+      ]
+    },
+    "scope_in": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scope_out": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "overlap_with_existing": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "asset_impact_preview": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "relation_changes_preview": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "PROPOSED",
+        "APPROVED",
+        "REJECTED",
+        "HELD"
+      ]
+    },
+    "user_approval_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "action",
+    "candidate_name",
+    "kind",
+    "scope_in",
+    "scope_out",
+    "reason",
+    "overlap_with_existing",
+    "asset_impact_preview",
+    "relation_changes_preview",
+    "status"
+  ]
+}

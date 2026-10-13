@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-acquire",
+  "goal": "寻找复合干热事件影响陆地植被 SIF 的代表性论文并建立后续精读候选",
+  "mode": "FOCUSED",
+  "deliverable": "5–8篇带来源核验状态的候选论文清单",
+  "scope": {
+    "inclusions": [
+      "陆地植被的太阳诱导叶绿素荧光对干旱/热浪及其复合的响应"
+    ],
+    "exclusions": [
+      "与植被响应无关的医学热浪研究"
+    ],
+    "publication_from": null,
+    "publication_to": null,
+    "source_preferences": [
+      "同行评议原始研究",
+      "关键综述"
+    ]
+  },
+  "concept_groups": [
+    {
+      "concept": "胁迫事件",
+      "terms": [
+        "drought",
+        "heatwave",
+        "compound drought and heat"
+      ],
+      "rationale": "扩展事件名称"
+    },
+    {
+      "concept": "遥感指标",
+      "terms": [
+        "solar-induced chlorophyll fluorescence",
+        "SIF"
+      ],
+      "rationale": "覆盖 SIF 全称与缩写"
+    }
+  ],
+  "sources": [
+    {
+      "source": "Undermind",
+      "planned": true,
+      "reason": "若宿主工具可用则执行语义检索"
+    }
+  ],
+  "queries": [
+    {
+      "query_id": "q1",
+      "source": "Undermind",
+      "query_text": "This study examines satellite solar-induced chlorophyll fluorescence responses of terrestrial vegetation to drought and heatwave events. It evaluates how extreme climate stress changes photosynthetic signals and discusses limitations of SIF monitoring.",
+      "query_kind": "SEMANTIC",
+      "filters": {},
+      "rationale": "科学问题语义检索"
+    }
+  ],
+  "inclusion_rules": [
+    "必须直接分析陆地植被响应与SIF相关结果"
+  ],
+  "exclusion_rules": [
+    "排除不涉及植被响应的研究"
+  ],
+  "fulltext_goal": "AVAILABILITY",
+  "limits": {
+    "search_calls": 5,
+    "deep_search_calls": 1,
+    "candidate_target": 8
+  },
+  "protocol_status": "EXPLORATORY",
+  "protocol_revision": 1,
+  "assumptions": [
+    "示例数据，用于 schema 校验，未执行任何真实检索"
+  ],
+  "open_questions": []
+}

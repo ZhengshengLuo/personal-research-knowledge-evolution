@@ -1,0 +1,197 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schemas/understand/reading_record.schema.json",
+  "$comment": "PRKE staging metadata; deterministic validation does not prove academic truth",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "enum": [
+        "1.0"
+      ]
+    },
+    "paper_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "depth": {
+      "enum": [
+        "SCAN",
+        "FOCUSED",
+        "DEEP"
+      ]
+    },
+    "interaction": {
+      "enum": [
+        "SILENT",
+        "INTERACTIVE"
+      ]
+    },
+    "primary_type": {
+      "enum": [
+        "REVIEW",
+        "SCIENTIFIC",
+        "METHOD",
+        "DATA_RESOURCE"
+      ]
+    },
+    "secondary_types": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "REVIEW",
+          "SCIENTIFIC",
+          "METHOD",
+          "DATA_RESOURCE"
+        ]
+      }
+    },
+    "reading_scope": {
+      "enum": [
+        "PDF_FULLTEXT",
+        "SOURCE_LIMITED",
+        "SELECTED_SECTIONS"
+      ]
+    },
+    "source_bundle": {
+      "type": "string",
+      "minLength": 1
+    },
+    "argument_chain": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "problem": {
+          "type": "string"
+        },
+        "prior_limitation": {
+          "type": "string"
+        },
+        "approach": {
+          "type": "string"
+        },
+        "mechanism": {
+          "type": "string"
+        },
+        "results": {
+          "type": "string"
+        },
+        "conclusion": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "problem",
+        "prior_limitation",
+        "approach",
+        "mechanism",
+        "results",
+        "conclusion"
+      ]
+    },
+    "type_specific": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "critical_appraisal": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "issue_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "question": {
+            "type": "string",
+            "minLength": 1
+          },
+          "verdict": {
+            "enum": [
+              "SUPPORTED",
+              "WEAKENED",
+              "LIMITED_SCOPE",
+              "NOT_ASSESSABLE",
+              "NO_ISSUE_IDENTIFIED"
+            ]
+          },
+          "reasoning": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_claim_ids": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "issue_id",
+          "question",
+          "verdict",
+          "reasoning",
+          "source_claim_ids"
+        ]
+      }
+    },
+    "author_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "agent_limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "takeaways": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "user_annotations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "paper_id",
+    "goal",
+    "depth",
+    "interaction",
+    "primary_type",
+    "secondary_types",
+    "reading_scope",
+    "source_bundle",
+    "argument_chain",
+    "type_specific",
+    "critical_appraisal",
+    "author_limitations",
+    "agent_limitations",
+    "takeaways",
+    "user_annotations",
+    "unresolved_questions"
+  ],
+  "additionalProperties": false
+}

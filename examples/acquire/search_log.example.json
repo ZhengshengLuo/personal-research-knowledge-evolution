@@ -1,0 +1,22 @@
+{
+  "schema_version": "1.0",
+  "task_id": "task-example-acquire",
+  "runs": [
+    {
+      "query_id": "q1",
+      "source": "Undermind",
+      "executed_at": "2026-10-13T00:00:00+00:00",
+      "query_text": "This study examines satellite solar-induced chlorophyll fluorescence responses of terrestrial vegetation to drought and heatwave events. It evaluates how extreme climate stress changes photosynthetic signals and discusses limitations of SIF monitoring.",
+      "query_kind": "SEMANTIC",
+      "status": "SKIPPED",
+      "result_count": null,
+      "visible_count": null,
+      "external_job_ref": null,
+      "applied_filters": {},
+      "limitations": [
+        "仅示例，未真实调用 Undermind"
+      ],
+      "notes": "SAMPLE_ONLY"
+    }
+  ]
+}

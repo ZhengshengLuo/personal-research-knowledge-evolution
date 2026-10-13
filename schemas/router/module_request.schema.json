@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://prke.local/schema/module_request/1.0",
+  "title": "module_request",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "route": {
+      "type": "string",
+      "enum": [
+        "acquire",
+        "understand",
+        "organize",
+        "synthesize"
+      ]
+    },
+    "stage_goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "input_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "read": {
+          "type": "boolean"
+        },
+        "staging_write": {
+          "type": "boolean"
+        },
+        "formal_commit": {
+          "type": "boolean"
+        },
+        "destructive": {
+          "type": "boolean"
+        },
+        "external_transfer": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "read",
+        "staging_write",
+        "formal_commit",
+        "destructive"
+      ]
+    },
+    "expected_outputs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "acceptance": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "route",
+    "stage_goal",
+    "input_refs",
+    "permissions",
+    "expected_outputs",
+    "acceptance",
+    "evidence_requirements"
+  ]
+}

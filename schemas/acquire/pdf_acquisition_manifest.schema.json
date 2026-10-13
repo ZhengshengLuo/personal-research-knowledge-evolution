@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "channel": {
+      "enum": [
+        "AUTO_FETCH",
+        "MANUAL_INBOX"
+      ]
+    },
+    "execute": {
+      "type": "boolean"
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "additionalProperties": true,
+        "properties": {
+          "status": {
+            "enum": [
+              "VERIFIED",
+              "PLAN_ONLY",
+              "NOT_ACQUIRED",
+              "NEEDS_MANUAL_REVIEW",
+              "IDENTITY_REVIEW_REQUIRED",
+              "AMBIGUOUS",
+              "REVIEW_REQUIRED"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "task_id",
+    "generated_at",
+    "channel",
+    "items"
+  ]
+}
