@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "purpose": "Declarative possible providers, not proof of connected tools",
+  "capabilities": [
+    {"capability_id":"literature.search","providers":["undermind","host_search","openalex"],"allowed_permissions":["P0"],"requirements":"host must actually invoke available search provider; capture source refs"},
+    {"capability_id":"literature.resolve","providers":["crossref","openalex","zotero_readonly"],"allowed_permissions":["P0"],"requirements":"match publication identity; do not confuse DOI with PDF version"},
+    {"capability_id":"pdf.inspect","providers":["host_pdf_reader","undermind","local_pdf"],"allowed_permissions":["P0"],"requirements":"record real file access; opening image does not prove visual interpretation"},
+    {"capability_id":"science.appraise","providers":["host_agent"],"allowed_permissions":["P0"],"requirements":"analysis with source anchors, not scientific verification by JSON alone"},
+    {"capability_id":"science.critic","providers":["host_subagent","undermind_pdf_subagent","host_agent_selfcheck"],"allowed_permissions":["P0"],"requirements":"label self-check vs separate context and source access honestly"},
+    {"capability_id":"science.synthesize","providers":["host_agent"],"allowed_permissions":["P0"],"requirements":"validate all major claims and cross-study comparability"},
+    {"capability_id":"knowledge.stage","providers":["prke_local_cli"],"allowed_permissions":["P1"],"requirements":"only stage outside the protected Vault; production commit separate"}
+  ]
+}

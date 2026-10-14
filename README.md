@@ -1,75 +1,43 @@
-# Personal Research Knowledge Evolution (PRKE)
+# PRKE — Personal Research Knowledge Evolution
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version: v1.5.0-rc1](https://img.shields.io/badge/Version-v1.5.0--rc1-green.svg)](RELEASE_SCOPE.md)
+**状态：`1.6.0-integration-preview`（隔离集成预览，非正式科研验收或稳定生产发布）。**
 
-> **PRKE (Personal Research Knowledge Evolution)** 是一个通用的科研知识演化 Agent Skill 与工作流工具链。  
-> 致力于科研领域认知探索、研究脉络建立、论文/方法/数据定向检索、证据来源审计、以及受控的 Zotero 与 Obsidian 本地科研知识库集成。
+一个以**科研问题和可检查证据**为中心的单入口 Agent Skill。共享科学推理/证据/治理规则，四个业务路由：Acquire、Understand、Organize、Synthesize。宿主 Agent（例如 Codex 或 Antigravity）进行科研推理和可用工具的实际调用；PRKE 确定性脚本负责证据结构、任务回执、去重、候选关系及受控知识变更。
 
----
+## 安装和使用
 
-## 核心特性
+1. 解压根目录 `personal-research-knowledge-evolution/` 到宿主支持的 Skills 位置，按当前宿主官方方式启用。不要将资料 Vault 放在 Skill 包内。
+2. 使用 Python 3.10+：`python -m pip install -r requirements.txt`。普通 QUICK 科研问答不要求运行 Zotero、Obsidian 或所有 PDF 组件。
+3. 运行 `python -m unittest discover -s tests -q`，或逐项执行 `router_cli.py doctor`、`execution_core.py doctor`、`scientific_semantics.py doctor`、`review_gate.py doctor`。
+4. 在聊天中直接提出科学问题：例如“精读这篇方法论文并指出其因果识别假设”，或“对比已有论文的事件响应 onset 证据，主动检索相反研究”。无需记忆路由名称。
+5. 管理正式科研知识时，首先阅读 `router/governance.md` 和 `docs/INSTALL_WINDOWS.md`。**普通 Agent 持有 Vault 写入权限的环境不允许无人值守正式提交。**
 
-- **单一 Skill 统揽**：以 `SKILL.md` 为核心，按需分流驱动业务路由。
-- **五大业务模块**：
-  - **Router**：需求意图识别、工作区分配与任务契约管理。
-  - **Acquire**：有界学术检索、SearchLog 留痕与合法 PDF 获取交接。
-  - **Understand**：论文贡献分类、图表关键数据审查与多篇科学对比。
-  - **Organize**：Zotero 本地只读探测、稳定 Paper UID 与 Obsidian 受控归档。
-  - **Synthesize**：跨论文 Evidence Matrix、Research Gap 演化与证据链追溯。
-- **高确定性与防篡改**：
-  - 强制库外暂存（Staging $\rightarrow$ Plan SHA256 校验 $\rightarrow$ Explicit Commit）。
-  - 事件不可逆哈希链与状态检查点（Checkpoints）。
-  - 10 篇论文阈值触发器（`trigger_cli.py`）。
+## 关键文件
 
----
+| 组件 | 路径 | 实际功能 |
+|---|---|---|
+| Skill 入口 | `SKILL.md` | Agent-first、QUICK/RESEARCH/MANAGED、四业务路由与安全红线 |
+| 专家协议 | `references/scientific-core/`, `references/experts/` | 科学推理、Scientific Critic、11 份按需专家协议 |
+| Host Handoff | `scripts/execution_core.py` | P0/P1 请求准备、宿主报告、文件哈希、幂等回执；**不执行真实 provider** |
+| 科学语义 | `scripts/scientific_semantics.py` | Claim/Evidence/Relation 候选数据核验；**不判断科研真值** |
+| 论文身份 | `scripts/paper_identity.py` | DOI/arXiv/文件版本与候选重复识别，库外记录 |
+| 独立审查合同 | `scripts/review_gate.py` | 审查来源/方法声明核验；不伪称人类同行评审 |
+| 既有业务 CLI | `scripts/{router,acquire,understand,organize,synthesize,knowledge,trigger}_cli.py` | 保留旧版代码与回归测试，Gap 事件/Method/Data 模板修复 |
+| 验收和限制 | `docs/IMPLEMENTATION_STATUS.md`, `docs/CAPABILITY_MATRIX.md` | 真实与未测试能力逐项区分 |
 
-## 快速开始
-
-### 1. 安装环境
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-### 2. 运行健康检查
+## 最小 Host Handoff（外部工具由宿主调用）
 
 ```powershell
-python scripts/router_cli.py doctor
-python scripts/acquire_cli.py doctor
-python scripts/understand_cli.py doctor
-python scripts/organize_cli.py doctor
-python scripts/synthesize_cli.py doctor
-python scripts/knowledge_cli.py doctor
-python scripts/trigger_cli.py doctor
+python scripts/execution_core.py capabilities
+python scripts/execution_core.py prepare --workspace C:\ResearchTasks\prke-test --task-id demo1 --action-id action01 --capability literature.search --provider host_search --input examples/vnext/host_input.example.json
+# 宿主真实调用搜索工具后，形成与 action01 匹配的结果 JSON，再 finalize；不能把 prepare 当成检索成功。
+python scripts/execution_core.py inspect --workspace C:\ResearchTasks\prke-test --action-id action01
 ```
 
-### 3. 运行测试套件
+`execution_core` 不自带 Undermind、联网搜索 SDK；外部检索、PDF 视觉、独立科学评价需要真正可用的宿主工具。正式 Vault P2 提交使用现有受控 CLI 的历史功能，但**其参数开关无法核实人类身份**，稳定权限必须经 Windows/宿主隔离后重新验收。
 
-```powershell
-python -m unittest discover -s tests -p "test_*.py" -q
-```
+## 真实能力边界
 
----
+已在隔离容器中通过合成数据回归测试，**不能**把这解释为真实科研 Gold Set、Windows Zotero 联动、Antigravity/Codex 每种环境、可信自动写入或 24h Worker 已验收。没有满足 G0–G3 的功能不发布稳定声明。详见 `docs/IMPLEMENTATION_STATUS.md`。
 
-## 项目结构
-
-```text
-personal-research-knowledge-evolution/
-├── SKILL.md                  # Agent 核心技能定义
-├── router/                   # Router 阶段控制协议与模块契约
-├── routes/                   # 各子路由详细业务指南 (Acquire, Understand, Organize, Synthesize)
-├── scripts/                  # 底层工程与确定性校验 CLI 工具链
-├── schemas/                  # 数据契约与 JSON Schema 规范
-├── templates/                # Obsidian 知识库及笔记模板
-├── adapters/                 # 外部系统适配器 (Zotero, PDF 获取, Undermind)
-├── references/               # 深度参考文档与规范
-├── docs/                     # 验收协议与能力矩阵
-└── tests/                    # 完整单元与集成测试用例
-```
-
----
-
-## 协议与免责说明
-
-本项目为科研工作流与知识库构建辅助工具。所有自动化提取均通过本地代码与哈希链校验，不进行外部未授权数据传输。详见 [RELEASE_SCOPE.md](RELEASE_SCOPE.md) 与 [README_安装与测试.md](README_安装与测试.md)。
+完整批准的最终设计合同：`docs/PRKE_FINAL_DESIGN_CONTRACT.md`。历史资料在 `docs/` 中保留供追踪，不能替代本文和能力矩阵的当前发布说明。

@@ -61,6 +61,17 @@ def validate_packet(p):
         if any(ref not in {r['claim_ref'] for r in data} for ref in d['evidence_refs']):raise ScienceError('分歧分析引用无效')
     for g in p.get('candidate_gaps',[]):
         require(g,'gap_id');require(g,'statement');refs=require(g,'evidence_refs',list)
+        change=g.get('evidence_change',{})
+        if change:
+            if not isinstance(change,dict) or change.get('kind') not in ('COUNTEREVIDENCE_FOUND','EVIDENCE_ADDED'):
+                raise ScienceError('不支持的明确证据事件')
+            if change['kind']=='COUNTEREVIDENCE_FOUND':
+                chosen=change.get('evidence_refs',[])
+                stances={r['claim_ref']:r['stance'] for r in data}
+                if (not isinstance(chosen,list) or not chosen or not set(chosen).issubset(set(refs)) or
+                    not all(stances.get(ref)=='CHALLENGES' for ref in chosen) or
+                    not isinstance(change.get('reason'),str) or len(change['reason'].strip())<20):
+                    raise ScienceError('反证必须引用已经注册的 CHALLENGES Claim 并给出科学理由')
         if not refs or any(ref not in {r['claim_ref'] for r in data} for ref in refs):raise ScienceError('Gap 无效证据引用')
         if 'first' in g['statement'].lower() or '首次' in g['statement'] or '无人研究' in g['statement']:raise ScienceError('禁止在候选 Gap 中自动宣称首次/无人研究')
     return data
@@ -84,7 +95,7 @@ def build(p):
         complete=bool(searches) and all(x.get('database') and x.get('date') and x.get('query') and x.get('status')=='COMPLETED' for x in searches)
         gaps.append({'gap_id':g['gap_id'],'statement':g['statement'],'evidence_refs':g['evidence_refs'],'closest_prior_work':record.get('closest_prior_work',[]),
                     'verification_status':'BOUNDED_CHECK_COMPLETED' if complete else 'PARTIAL',
-                    'human_approval_required':True,'hypothesis':g.get('hypothesis'),'falsifier':g.get('falsifier'),
+                    'human_approval_required':True,'evidence_change':g.get('evidence_change',{}),'hypothesis':g.get('hypothesis'),'falsifier':g.get('falsifier'),
                     'failure_modes':g.get('failure_modes',[]),'verification_record':record})
         if not complete:blocked.append('Gap '+g['gap_id']+' 尚未提供完整有界反证检索记录')
     if not p.get('scientific_findings'):

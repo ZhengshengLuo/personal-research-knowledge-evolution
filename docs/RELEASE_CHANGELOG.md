@@ -1,3 +1,17 @@
+# 1.6.0-integration-preview — 2026-10-14
+
+- 保留 v1.5.0-rc1 全部旧业务路由与安全回归测试。
+- 统一 SKILL.md 科研 Agent 使命、无感 Router、三执行模式、按需专家与证据红线。
+- 新增 11 份专家协议以及 Scientific Reasoning、Critic 与 Knowledge Evolution 指导。
+- 新增 P0/P1 capability/host handoff 执行状态与完整性收据（**不自动连接外部 provider**）。
+- 新增 conservative Paper Identity、Claim/Evidence/Relation 结构候选验证和审查记录门槛。
+- 将既有 Gap 更新明确分离 COUNTEREVIDENCE_FOUND 与 SCOPE_REFINED；增加最近事件的可读概要。
+- 修复 Method/Data 新节点误用 Topic 模板问题。
+- 增加 README、Windows 安全安装指南、验收协议、CI 测试与状态矩阵。
+- 本版为集成预览，不宣称科学 Gold Set、Windows Trusted Committer 或后台 Worker 稳定能力。
+
+---
+
 # PRKE 版本变更记录
 
 ## v1.5.0-rc1（2026-10-13，可测试集成候选）

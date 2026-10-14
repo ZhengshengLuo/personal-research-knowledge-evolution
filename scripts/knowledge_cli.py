@@ -44,7 +44,7 @@ def append_event(history,e):
     e['event_hash']=digest(e)
     history.append(e)
 
-def render_topic(topic,overview,entries):
+def render_topic(topic,overview,entries,history=None):
     arr=['## 最新科学综合（AI 候选，待独立核验）','',
          f'> [!warning] AI_SYNTHESIS_DRAFT','> 仅反映指定文献范围的证据整理。没有完成独立科学评审，不代替研究者确认结论。','',
          f'- 当前问题：{overview["research_question"]}',f'- 论文覆盖：{overview["source_coverage"]["unique_papers"]} 篇；来源 Claim：{overview["source_coverage"]["claims"]}',
@@ -58,7 +58,14 @@ def render_topic(topic,overview,entries):
     for i,g in enumerate(entries[:15]):
         name=g['gap_id'].replace('"','')[:35]
         arr.extend([f'    G{i}["{name}"]',f'    T --> G{i}'])
-    arr.extend(['```','','- 查看全库 [[Research Gap Overview]] 获取其他 Topic 的研究机会。',''])
+    arr.extend(['```','','### 最近的科学演化记录（非因果链）',''])
+    relevant=[e for e in (history or []) if e.get('gap_id') in {g['gap_id'] for g in entries}]
+    for event in relevant[-6:]:
+        arr.append('- `'+event['event_type']+'` · Gap `'+event['gap_id']+'` · '+str(event.get('reason',''))+
+           ' · '+str(event.get('approval_status',''))+'；来源：'+', '.join('`'+str(x)+'`' for x in event.get('evidence_refs',[])[:3]))
+    if not relevant:arr.append('- 尚无已记录的实质演化事件。')
+    arr.extend(['','- 事件按记录顺序展示，不表示相邻事件存在因果关系。完整历史参见受控结构化账本。',
+                '- 查看全库 [[Research Gap Overview]] 获取其他 Topic 的研究机会。',''])
     return '\n'.join(arr)
 def ai_hash(text):
     if not text or AI_START not in text and AI_END not in text:return None
@@ -108,15 +115,27 @@ def stage(a):
         uid=candidate['gap_id'];statement=candidate['statement']
         if not re.fullmatch(r'[A-Za-z0-9_-]{3,80}',uid):raise ScienceError('Gap ID 不安全')
         g=gaps.get(uid)
+        was_existing=g is not None
+        change={}
+        has_counter=False
         if g and g['topic_id']!=topic:raise ScienceError('跨 Topic 既有 Gap，需专门人工关联操作')
         if g is None:
             g={'gap_id':uid,'topic_id':topic,'current_statement':statement,'workflow_status':'CANDIDATE','evidence_status':'INSUFFICIENT','novelty_status':candidate['verification_status'],'version':1,'pending_statement':None,'latest_evidence_refs':candidate['evidence_refs']}
             gaps[uid]=g;etype='EVIDENCE_ADDED';req=False
         else:
             req=g['current_statement']!=statement
-            etype='SCOPE_REFINED' if req else 'EVIDENCE_ADDED'
+            # The scientific meaning of evidence, not string change alone, selects
+            # COUNTEREVIDENCE_FOUND. A concurrent wording change is a separate
+            # proposed scope revision, never an automatic science decision.
+            change=candidate.get('evidence_change',{})
+            has_counter=change.get('kind')=='COUNTEREVIDENCE_FOUND'
+            if has_counter and (not change.get('evidence_refs') or
+                not set(change['evidence_refs']).issubset(set(candidate['evidence_refs'])) or
+                not isinstance(change.get('reason'),str) or len(change['reason'].strip())<20):
+                raise ScienceError('反证事件需要关联现有证据及具体科学理由')
+            etype='COUNTEREVIDENCE_FOUND' if has_counter else ('SCOPE_REFINED' if req else 'EVIDENCE_ADDED')
             if req:
-                # Distinguish proposed, not confirmed. No user-approved change to canonical statement.
+                # Revision remains pending researcher's separate scientific decision.
                 g['pending_statement']=statement;g['workflow_status']='PENDING_HUMAN'
             prior_evidence=set(g.get('latest_evidence_refs',[]))
             g['latest_evidence_refs']=sorted(prior_evidence | set(candidate['evidence_refs']))
@@ -124,18 +143,25 @@ def stage(a):
             if not req and set(candidate['evidence_refs']).issubset(prior_evidence):etype='NO_MATERIAL_CHANGE'
         event={'event_id':str(uuid.uuid4()),'gap_id':uid,'event_type':etype,'at_utc':now(),'task_id':r['run_id'],
                'parent_version':g['version'],'new_version':g['version']+(1 if req else 0),'evidence_refs':candidate['evidence_refs'],
-               'reason':'本轮来源更新；重要范围变化需要研究者确认' if req else '阶段性新增或复核证据',
+               'reason':change['reason'] if was_existing and has_counter else ('本轮来源更新；重要范围变化需要研究者确认' if req else '阶段性新增或复核证据'),
                'previous_statement':g['current_statement'],'proposed_statement':statement,
                'review_required':req,'approval_status':'PENDING_HUMAN' if req else 'AI_CANDIDATE',
                'provenance':'SYNTHESIS_STAGE'}
         append_event(hist,event);updates.append(event)
+        if was_existing and has_counter and req:
+            # Counterevidence and the proposed revised scope are two distinct
+            # events; latter always remains PENDING_HUMAN.
+            refinement={**event,'event_id':str(uuid.uuid4()),'event_type':'SCOPE_REFINED',
+                'reason':'反证触发的新范围表述提案，尚待研究者确认',
+                'approval_status':'PENDING_HUMAN','review_required':True}
+            append_event(hist,refinement);updates.append(refinement)
     st['gaps']=gaps;st['last_event_hash']=hist[-1]['event_hash'] if hist else None
     st['topics'][topic]={**st['topics'].get(topic,{}),'last_run_id':r['run_id'],'last_input_digest':r['input_digest'],'updated_at':now()}
     entries=[x for x in gaps.values() if x['topic_id']==topic]
     tpath=inside(v,topic_rel)
     existing=tpath.read_text(encoding='utf-8') if tpath.exists() else ''
     protect_topic(existing,st['topics'].get(topic,{}))
-    topic_blob=inject(existing,render_topic(topic,r,entries))
+    topic_blob=inject(existing,render_topic(topic,r,entries,hist))
     overview=render_overview(gaps)
     st['topics'][topic]['managed_ai_sha256']=ai_hash(topic_blob)
     st['overview_sha256']=sha(overview.encode('utf-8'))
@@ -325,6 +351,13 @@ def stage_knowledge(a):
         old=target.read_text(encoding='utf-8') if target.exists() else ''
         if ai_hash(old)!=ki['notes'].get(rel):raise ScienceError('该知识节点受管区出现无记录变更，停止自动覆盖：'+rel)
         extra='\n\n'.join([body,'**原始证据引用**：'+', '.join('`'+x.replace('`','')+'`' for x in refs)])
+        if not old:
+            meta={'METHOD':('method','## 数学/物理原理与假设'),
+                  'DATA':('data_resource','## 来源、版本与质量控制'),
+                  'TOPIC_DOMAIN':('topic','## 领域知识与核心机制'),
+                  'TOPIC_QUESTION':('topic','## 研究问题与适用边界')}
+            asset,heading=meta[kind]
+            old='---\nasset_type: '+asset+'\nprke_id: '+json.dumps(kind+':'+name,ensure_ascii=False)+'\n---\n\n# '+name+'\n\n'+heading+'\n\n## 我的科研判断（人工维护）\n\n'
         revised=inject(old,extra)
         changes[rel]=revised.encode('utf-8')
         ki['notes'][rel]=ai_hash(revised)

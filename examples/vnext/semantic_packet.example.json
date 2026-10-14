@@ -1,0 +1,10 @@
+{
+  "schema_version":"1.0",
+  "papers":[{"paper_uid":"synthetic-P1","access_scope":"FULLTEXT_ACCESSED","identity":{"doi":"10.5555/synthetic-example"}}],
+  "evidence":[{"evidence_id":"synthetic-E1","paper_uid":"synthetic-P1","evidence_kind":"FULLTEXT_FIGURE","source_locator":"Synthetic PDF physical page 2 Fig. 1, not a real paper","source_version":"synthetic-input-for-tests"}],
+  "claims":[
+    {"claim_id":"synthetic-C1","claim_kind":"AUTHOR_RESULT","statement":"Synthetic numerical trend in toy data only","evidence_refs":["synthetic-E1"],"study_context":{"population":"toy plants","measurement":"fluorescence","time_support":"biweekly","space_support":"synthetic sites","study_design":"toy observation","estimate_target":"association"}},
+    {"claim_id":"synthetic-C2","claim_kind":"AGENT_INFERENCE","statement":"Synthetic broader interpretation awaiting review","evidence_refs":["synthetic-E1"],"study_context":{"population":"toy plants","measurement":"fluorescence","time_support":"biweekly","space_support":"synthetic sites","study_design":"toy observation","estimate_target":"association"}}
+  ],
+  "relations":[{"relation_id":"synthetic-R1","relation_type":"REFINES","source_claim_id":"synthetic-C1","target_claim_id":"synthetic-C2","comparability":{"status":"CONDITIONALLY_COMPARABLE","rationale":"The two statements address the same toy observable and temporal support but imply different levels of generality."},"scientific_warrant":"Synthetic example only: the data illustrate a narrower statement than the broader interpretation.","evidence_refs":["synthetic-E1"],"review_status":"CANDIDATE"}]
+}

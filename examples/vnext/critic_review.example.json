@@ -1,0 +1,11 @@
+{
+  "schema_version":"1.0",
+  "risk":"HIGH",
+  "main_claim":"Synthetic fluorescence indicator could detect all stress event phases in toy example.",
+  "main_evidence_refs":["synthetic-P1#C1"],
+  "counterarguments":[{"reason":"The toy case did not provide independent onset, peak and recovery reference times; event timing is untested."}],
+  "reviewer_verdict":"DEFER",
+  "review_method":"SELF_CHECK",
+  "review_evidence_refs":["synthetic-P1#C1"],
+  "note":"SELF_CHECK is not an independent scientific verification. Synthetic only."
+}

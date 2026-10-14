@@ -1,18 +1,17 @@
-# PRKE v1.5.0-rc1｜能力与证据状态（发布前）
+# PRKE 1.6.0-integration-preview — 当前真实能力矩阵
 
-状态术语：DESIGNED / IMPLEMENTED / OFFLINE_TESTED / LIVE_TESTED / NOT_RUN。`OFFLINE_TESTED` 仅说明合成或离线工程验收，不代表科学事实已核验。
-
-| 功能 | 当前可声明状态 | 剩余验证 |
+| 能力 | 本包当前状态 | 未验证的部分 |
 |---|---|---|
-| Router/Acquire/Understand/Organize 原 v1.4 程序 | OFFLINE_TESTED | Windows 实机运行与科研内容审查 |
-| Synthesize 来源结构审计/草稿 | OFFLINE_TESTED | 多篇真实科研内容 Gold Set |
-| Understand → Synthesize 只读桥接 | IMPLEMENTED | Krich 2021 真实审读数据执行 |
-| Topic/Method/Data 受控增补 | OFFLINE_TESTED | 正式 Obsidian 功能与人工区审查 |
-| Gap Ledger、Mermaid Overview、确认/拒绝与 Idea | OFFLINE_TESTED | 研究者现场真实工作流 |
-| 外部 Gap 反证检索 | HOST_AGENT_PROTOCOL | 真实 Acquire 调用及日志与原文核对 |
-| Zotero 原始高亮与图片精确裁切 | IMPLEMENTED_HELPERS | 用户本机 Zotero 与 PDF 图像身份核验 |
-| Excel 五表按需导出 | OFFLINE_TESTED_OPTIONAL | Windows 环境 artifact_tool 安装 / 字段覆盖 |
-| 10 篇任务阈值与 pending 队列 | OFFLINE_TESTED | 自动后台调度授权、实机并发与崩溃恢复 |
-| 3–5 篇独立科学 Gold Set | NOT_RUN | 科研者独立审阅 |
-| Windows 24 小时稳定性 | NOT_RUN | 真实≥24h，不许模拟 |
-| 不可伪造的人类身份授权 | NOT_IMPLEMENTED | Windows ACL/可信宿主独立审批系统 |
+| 一个 SKILL.md 与四模块入口 | IMPLEMENTED, OFFLINE_TESTED | Codex/Antigravity 实际触发与 S0 科学效果 |
+| Scientific Reasoning + 专家协议 | IMPLEMENTED (instruction) | 多学科独立 Gold Set |
+| P0/P1 Host Handoff + file receipts | OFFLINE_TESTED (synthetic) | 真实宿主 provider 调用与不可伪造身份 |
+| DOI/arXiv/PDF 版本保守识别 | OFFLINE_TESTED (synthetic) | 大规模不同版本识别准确率 |
+| Claim/Evidence/Relation 候选验证 | OFFLINE_TESTED (structural) | 科学语义准确性与跨模块事务存储 |
+| Scientific Critic 校验合同 | OFFLINE_TESTED (structural) | 独立子 Agent 在用户实际宿主上的质量/身份独立性 |
+| Gap 反证 vs 范围修订分离 | OFFLINE_TESTED (synthetic) | 真实科学反证和人工决策全过程 |
+| Method/Data AI 笔记模板修复 | OFFLINE_TESTED (synthetic) | Obsidian Windows 实机呈现 |
+| 已有 PDF / Organize / 受控提交 CLI | 原版与新增测试 OFFLINE_TESTED | 正式 Vault ACL 隔离、可靠身份鉴别 |
+| 外部学术检索 / PDF 科学审查 | HOST_DEPENDENT | 未端到端验收；无内置第三方 API 凭据 |
+| 原生 24h Worker | NOT_IMPLEMENTED | 后台部署、真实 soak |
+| 可信正式 Vault 无人值守写入 | BLOCKED_FOR_PRODUCTION | Windows/受信宿主独立执行身份与审计 |
+| S1–S6 和 G1–G3 | NOT_RUN | 独立人工 Gold Set 和实际系统集成 |
