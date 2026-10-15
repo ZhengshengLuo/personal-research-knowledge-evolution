@@ -1,22 +1,24 @@
-# PRKE 1.6.0-integration-preview — 实现与验收状态
+# PRKE 1.7.0-research-first-preview｜实现与验收状态
 
-**基线**：使用研究者提供的 v1.5.0-rc1 完整 ZIP 隔离解压；基线运行 116 项 unittest，全部通过。**本次实施依据** `docs/PRKE_FINAL_DESIGN_CONTRACT.md`。仅改动隔离构建目录，不写远程仓库、Obsidian 正式 Vault 或 Zotero。
+基线来自用户保存的 1.6.0 完整 ZIP；本次在隔离目录保留全部既有业务脚本、模板、历史设计文件和测试，**不修改正式 Zotero、Obsidian 或远程仓库**。
 
-## W0–W7 实际交付
+## 实际完成
 
-| 工作包 | 当前完成 | 未完成/边界 |
+- 重写 `SKILL.md`，四业务模块 `routes/`、Router 的需求/规划/分派说明、科学核心的推理/审查/知识演化协议，强化面向科研问题的自然表达。
+- 新增 `references/scientific-core/source-to-claim.md`，聚焦时空尺度、统计量、图像观察及 Claim 边界等真实审查问题。
+- `execution_core.py` 改为跨平台独占 JSON 创建；请求先在隐藏暂存目录准备完整后再发布；新增本地回执摘要和来源字段结构检查，避免依赖原 `os.link`。
+- `scientific_semantics.py` 增加作者 Claim 归属核对；所有 NOT_COMPARABLE 的研究 Claim 关系均暂缓；未注册外部实体目标保持候选。
+- `review_gate.py` 增强主证据引用、审查证据和反方理由的字段类型校验。
+- 新增 9 项针对上述行为的负面回归测试；原有 128 项测试保留。
+- **当前容器 Python 3.13.5：137/137 unittest PASS**；已通过的本地测试不代表 Windows 实机、外部检索、视觉、独立科学质量或正式权限验收。
+
+## 未完成、不能宣称的事项
+
+| Gate | 当前状态 | 需要补足 |
 |---|---|---|
-| W0 基线保护 | 完成：独立原始 ZIP、可重复 116 项回归、原文件快照 | GitHub HEAD 同步需用户在目标仓库现场核实 |
-| W1 Agent/Router | 完成：科研意图驱动 SKILL、QUICK/RESEARCH/MANAGED、专家按需加载入口 | 宿主 Agent 行为准确率仍需 S0 真实试验 |
-| W2 执行 | 完成：声明型 capability registry、P0/P1 Host Handoff、产物哈希与不可重复回执 | **无通用外部 SDK；host 自报回执不是可信第三方执行证明；未实测实时工具交接** |
-| W3 科研审查 | 完成：Scientific Core、11 项任务/方法/学科专家协议、独立复核数据结构与边界门槛 | **未完成独立人工 Gold Set 和真实 PDF 全面验证** |
-| W4 科学知识 | 完成：候选 Claim/Evidence/Relation 验证、论文身份候选、反证与范围修订分离、Gap 历史摘要 | **结构核验不等于科学关系真值**；跨任务统一事务索引仍需集成 |
-| W5 Organize | 完成：Method/Data 新节点类型修复、原有 stage/commit/recovery 保留 | **可信独立提交主体和 Windows ACL 未实现/验收；无人值守生产写入禁用** |
-| W6 可靠性 | 完成：合成离线安全、去重和事件测试；提供真实评估计划 | Windows/Zotero 实机、24h soak、跨学科 Gold Set、S1–S6 真实闭环未完成 |
-| W7 发布 | 完成：预览包、README/安装指南、CI 文件、版本及能力矩阵 | Stable RELEASE BLOCKED；上游 LICENSE 尚需作者选定，CI 尚需真实 GitHub 运行 |
+| G0 工程 | 离线测试通过、跨平台修复已写入；Windows 原生验证待做 | Win/Conda 原版测试、锁与强制中断、并发、回滚 |
+| G1 实际执行 | 之前案例证明了部分真实宿主交接，本版未完成自动路由验证 | 在实际安装的宿主完成无需人工拼接的 S0–S4 |
+| G2 科学质量 | 已知错误转化为核验规则，但没有冻结 Gold Set 实验 | Figure 像素查看、真实评分、盲法对照 |
+| G3 生产权限 | 未部署可信独立写入者、Windows ACL 或长期 Worker | 目标宿主与正式资产的隔离验收；需要后台才验证 Worker |
 
-## 科学和安全发布承诺
-
-状态命名：`IMPLEMENTED`（有程序/协议）、`OFFLINE_TESTED`（合成测试）、`HOST_DEPENDENT`（宿主可用时依赖真实工具）、`NOT_RUN`、`BLOCKED_FOR_PRODUCTION`。不得声称 v1.6 通过 S0–S6 或 G0–G3；仅 G0 **本容器离线子集**已运行。
-
-因原仓库没有明确 LICENSE，本次不擅自为原作者选定开源许可证。欲公开正式发布前，须由知识产权人决定授权条款，并核对上游所有资源的许可。
+上游代码尚无经作者确认的 LICENSE；本次不替作者作授权决定。先按科研任务实际可用范围安装与使用，不能将预览包称为生产稳定版本。

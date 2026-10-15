@@ -1,28 +1,28 @@
-# Understand — PRKE 科研理解与证据评估（v1.3.0）
+# Understand｜把论文真正读明白
 
-本模块接受 Router 分派，**以用户阅读目的为首要轴、论文主要贡献为默认协议**；不替代 Acquire 的检索、不执行 Organize 的正式存储、不宣布 Synthesize 的领域共识。详细规范按需读取 `references/understand/`，不重复复制 Nature 项目全部代码或他人许可证内容。
+**使命：** 还原研究如何从科学问题走到结论，以及哪一步论证可能不足。精读不是重新叙述摘要，也不是把所有章节逐段翻译。
 
-## 路由与工作模式
+## 从阅读目标决定重点
 
-- 阅读深度：SCAN/FOCUSED/DEEP；方式：INTERACTIVE/SILENT。独立选择；静默不降低证据标准。
-- 主类型 REVIEW/SCIENTIFIC/METHOD/DATA_RESOURCE，可增次类型。类型特化阅读重点见 `paper-type-protocols.md`。
-- 单篇精读无需默认外部引文扩展；多篇比较先对齐估计目标、数据、定义、尺度及实验设计，关键争议才有界委托 Acquire；对未精读论文明确标记为定向审查。
-- 已经大致阅读的论文可以静默整理 Paper Note，保留实际阅读深度，不能自称 DEEP。
+- `SCAN`：判断论文是否值得深入阅读，准确说明仅看到了哪些材料。
+- `FOCUSED`：围绕某个方法、结果或图表深读有关章节与必要附录。
+- `DEEP`：系统还原研究问题、假设、设计、方法、证据、关键图表和局限。
 
-## 质量硬门槛
+按实际论文贡献选择科学实证、方法、综述或数据资源等协议；用户已有明确问题时可直接定位，不强求完整长报告。
 
-1. 在本地逐篇 PDF 准备 SourceBundle、实际渲染图表。正文主要 Figure/Table 在 DEEP 模式必须全检查，相关 Supplement 同样检查，图像必须实际查看，不可只读 Caption。见 `visual-evidence.md`。
-2. 所有 DEEP 模式必须完成结构化批判性证据审查，按主类型核验。原文声明、作者解释、Agent 推断及假说分开。见 `critical-appraisal.md`。
-3. 报告真实读到的范围；图像缺失、来源版本不匹配、重要结果未核验须 PARTIAL/BLOCKED，不能用文字解析成功代替视觉成功。
-4. 本地 `scripts/understand_cli.py prepare` **只是渲染/提取**；Agent 必须实际通过可用的视觉工具查看所渲染图像，记录证据及图号，再以 `audit` 审查。审计脚本不能证明 Agent 眼睛读过图，必须保留宿主操作日志。
+## 真正需要审查的内容
 
-## 交付与授权
+1. **问题和贡献**：作者解决什么，与之前研究相比真正新增了什么？
+2. **研究设计**：对象、对照、测量和估计目标是什么？有没有混杂、选择偏差、样本依赖或训练/测试泄漏？
+3. **方法与结果**：计算步骤、统计量、置信区间或不确定性是否足以支持结论？
+4. **图表与补充材料**：实际查看核心 Figure/Table 图像，而不只提取文字或 Caption；核实坐标、单位、分组、时间聚合、样本量和图中所用统计量。
+5. **证据范围**：把观测结果、作者机制解释、模型推断和自己的认识清楚分开；列出可替代解释。
+6. **可追溯**：记录 PDF 版本与哈希、实际 PDF 物理页码、图/表号和已核验范围；区分期刊印刷页码与 PDF 页面索引。
 
-- `note` 生成库外 PaperNoteDraft；如审计 PARTIAL 必须显式 `--allow-partial` 才可出草稿，并显示不完整项。
-- `html` 是可选轻量本地阅读视图；交互由宿主 Agent 对话完成，**不声称 HTML 内有 AI 聊天或划线回写**。
-- `init-comparison` 只生成多篇比较骨架，跨研究可比性和证据差异由实际阅读 Agent 执行。
-- `handoff` 仅生成未来 Organize 执行的 `PENDING_ORGANIZE` 材料：即便用户选择任务级授权 A，本版也没有正式 Vault 写入接口，**不得报告“已存入 Obsidian”**。
+**典型风险：** 把小时配对关系误记成日均；把相关强度改变说成斜率改变；把叶片净同化当作生态系统 GPP；把某个事件的模型拟合当作独立机制验证。任何“图像已审”的标记都要有真实视觉访问记录。
 
-## 本地入口
+## 交付与边界
 
-`python scripts/understand_cli.py doctor`。其余命令见 README。PDF 所在地及产物仅在用户控制的库外任务目录，禁止未经授权的云端上传。
+优先交付论文的研究逻辑、关键结果、适用条件、最重要的方法学问题和可复核来源。复杂任务生成 `SourceBundle`、`FigureInventory`、`ClaimEvidenceMatrix` 与审读笔记；图像未实际查看时即使所有页面渲染完成，也不能宣称 DEEP 全面核验通过。
+
+`scripts/understand_cli.py` 可以准备 PDF、渲染与审计，但不能替代研究 Agent 的真实阅读、图像观察与科学判断。按需参阅 `references/experts/tasks/understand.md`、`references/scientific-core/source-to-claim.md`。不执行正式知识库写入。

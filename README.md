@@ -1,43 +1,53 @@
-# PRKE — Personal Research Knowledge Evolution
+# PRKE｜个人科研知识演化（完整 Skill 包）
 
-**状态：`1.6.0-integration-preview`（隔离集成预览，非正式科研验收或稳定生产发布）。**
+**版本：1.7.0-research-first-preview**  
+**性质：以真实科研为中心的集成升级包，仍非正式生产验收版本。**
 
-一个以**科研问题和可检查证据**为中心的单入口 Agent Skill。共享科学推理/证据/治理规则，四个业务路由：Acquire、Understand、Organize、Synthesize。宿主 Agent（例如 Codex 或 Antigravity）进行科研推理和可用工具的实际调用；PRKE 确定性脚本负责证据结构、任务回执、去重、候选关系及受控知识变更。
+PRKE 是一个可在受支持宿主 Agent 中加载的科研 Skill。它把科研问题的理解、文献与数据发现、原文精读、科学综合和长期知识积累组织在一起，使 AI 既能协助研究，也能明确自己的证据局限。
 
-## 安装和使用
+## 主要能力
 
-1. 解压根目录 `personal-research-knowledge-evolution/` 到宿主支持的 Skills 位置，按当前宿主官方方式启用。不要将资料 Vault 放在 Skill 包内。
-2. 使用 Python 3.10+：`python -m pip install -r requirements.txt`。普通 QUICK 科研问答不要求运行 Zotero、Obsidian 或所有 PDF 组件。
-3. 运行 `python -m unittest discover -s tests -q`，或逐项执行 `router_cli.py doctor`、`execution_core.py doctor`、`scientific_semantics.py doctor`、`review_gate.py doctor`。
-4. 在聊天中直接提出科学问题：例如“精读这篇方法论文并指出其因果识别假设”，或“对比已有论文的事件响应 onset 证据，主动检索相反研究”。无需记忆路由名称。
-5. 管理正式科研知识时，首先阅读 `router/governance.md` 和 `docs/INSTALL_WINDOWS.md`。**普通 Agent 持有 Vault 写入权限的环境不允许无人值守正式提交。**
+- **Acquire**：找到真实的论文、方法、数据与可能的反证；记录检索覆盖和原文获取情况。
+- **Understand**：读懂论文的假设、研究设计、统计结果、图表和局限；证据可回到原文。
+- **Synthesize**：比较研究、解释分歧、检查竞争机制、提出或否定候选科学问题。
+- **Organize**：把值得积累的科研认识与 Zotero 文献、Obsidian 知识、Claim/Evidence/Gap 历史联系起来。
 
-## 关键文件
+**Router** 根据科研目标按需组合能力；**Scientific Reasoning / Critic** 提醒模型重视研究设计、尺度、估计量、反证和推断边界。任何结构脚本都不能自动证明科学真值。
 
-| 组件 | 路径 | 实际功能 |
-|---|---|---|
-| Skill 入口 | `SKILL.md` | Agent-first、QUICK/RESEARCH/MANAGED、四业务路由与安全红线 |
-| 专家协议 | `references/scientific-core/`, `references/experts/` | 科学推理、Scientific Critic、11 份按需专家协议 |
-| Host Handoff | `scripts/execution_core.py` | P0/P1 请求准备、宿主报告、文件哈希、幂等回执；**不执行真实 provider** |
-| 科学语义 | `scripts/scientific_semantics.py` | Claim/Evidence/Relation 候选数据核验；**不判断科研真值** |
-| 论文身份 | `scripts/paper_identity.py` | DOI/arXiv/文件版本与候选重复识别，库外记录 |
-| 独立审查合同 | `scripts/review_gate.py` | 审查来源/方法声明核验；不伪称人类同行评审 |
-| 既有业务 CLI | `scripts/{router,acquire,understand,organize,synthesize,knowledge,trigger}_cli.py` | 保留旧版代码与回归测试，Gap 事件/Method/Data 模板修复 |
-| 验收和限制 | `docs/IMPLEMENTATION_STATUS.md`, `docs/CAPABILITY_MATRIX.md` | 真实与未测试能力逐项区分 |
+## 安装（三步）
 
-## 最小 Host Handoff（外部工具由宿主调用）
+1. 将完整 `personal-research-knowledge-evolution/` 目录放进**当前宿主官方支持的 Skills 目录**，确认在宿主技能列表中可见；仅复制到任意工程目录不等于已经启用。
+2. 在该目录执行 `python -m pip install -r requirements.txt`（Python 3.10+），运行 `python -m unittest discover -s tests -q`。也可单独检查 `python scripts/router_cli.py doctor` 等。
+3. 在宿主的**新会话**中自然提出科研问题，或显式引用该 Skill 测试触发。使用外部检索、图像阅读和独立 Agent 前，务必确认宿主真的提供这些工具。
 
-```powershell
-python scripts/execution_core.py capabilities
-python scripts/execution_core.py prepare --workspace C:\ResearchTasks\prke-test --task-id demo1 --action-id action01 --capability literature.search --provider host_search --input examples/vnext/host_input.example.json
-# 宿主真实调用搜索工具后，形成与 action01 匹配的结果 JSON，再 finalize；不能把 prepare 当成检索成功。
-python scripts/execution_core.py inspect --workspace C:\ResearchTasks\prke-test --action-id action01
-```
+Windows 安装及正式科研资产保护请先阅读 `docs/INSTALL_WINDOWS.md`。
 
-`execution_core` 不自带 Undermind、联网搜索 SDK；外部检索、PDF 视觉、独立科学评价需要真正可用的宿主工具。正式 Vault P2 提交使用现有受控 CLI 的历史功能，但**其参数开关无法核实人类身份**，稳定权限必须经 Windows/宿主隔离后重新验收。
+## 典型用法
 
-## 真实能力边界
+> “请比较这些论文对干旱下 SIF–GPP 关系的结论，重点找出研究尺度不同导致的表面冲突。对无法核验的图表请说明缺口。”
 
-已在隔离容器中通过合成数据回归测试，**不能**把这解释为真实科研 Gold Set、Windows Zotero 联动、Antigravity/Codex 每种环境、可信自动写入或 24h Worker 已验收。没有满足 G0–G3 的功能不发布稳定声明。详见 `docs/IMPLEMENTATION_STATUS.md`。
+> “我已有一批论文，先找出有争议的关键假设，提出可以证伪的研究方案；不要为了凑数制造 Research Gap。”
 
-完整批准的最终设计合同：`docs/PRKE_FINAL_DESIGN_CONTRACT.md`。历史资料在 `docs/` 中保留供追踪，不能替代本文和能力矩阵的当前发布说明。
+> “查看已有 Topic 的结论，在库外提出新证据触发的修订建议，保留旧版本，不修改正式知识库。”
+
+**不需要先连接 Zotero、创建 Obsidian 才能开展科研问答、检索与阅读。** 如果需要长期保存，再连接现有 Zotero（原则上只读）、选择一个已有或新建的长期 Vault，先在测试 Vault 验证；正式 Vault 写入必须受可信授权保护。
+
+## 核心文件
+
+| 文件 | 用途 |
+|---|---|
+| `SKILL.md` | 科研协作入口，建议先读 |
+| `routes/` | 四项科研能力的实际工作原则 |
+| `references/scientific-core/` | 科学推理、反方审查、原文证据和知识演化 |
+| `references/experts/` | 按需加载的任务、方法及学科专家协议 |
+| `router/` | 需求理解、动态规划、模块选择、Workspace 与权限 |
+| `scripts/` | 本地证据、任务、PDF、综合、知识暂存与恢复工具 |
+| `docs/PRKE_FINAL_DESIGN_CONTRACT.md` | 研究者批准的原始设计（保留不变） |
+| `docs/CAPABILITY_MATRIX.md` | 本次实际可声明的能力边界 |
+| `docs/UPGRADE_1.7.0.md` | 本次升级内容、兼容性和待验收事项 |
+
+## 现实边界
+
+PRKE 的本地脚本可以校验结构、来源引用声明和文件完整性；**科研理解、图像查看、在线检索和独立审查依赖宿主真实执行**。`execution_core.py` 的回执仅证明有一个宿主报告，并不是真实外部平台的加密执行证明。普通 Agent 只靠同一身份与 CLI 确认标志，不能完成可信的无人值守生产入库。未部署 Worker 时不声称能持续后台运行。
+
+**版本声明：** 1.7.0 修正并强化了若干可复现的本地行为，但没有凭提示词更新“实现”自主运行时、独立科研 Gold Set 或正式 Zotero/Obsidian 可信连接。详见能力矩阵与升级说明。

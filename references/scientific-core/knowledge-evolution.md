@@ -1,15 +1,22 @@
-# Scientific Knowledge & Protocol Evolution
+# Knowledge Evolution｜新证据如何改变既有认识
 
-## 两条独立演化链
+PRKE 的科研知识不是一次写好就不再修改的笔记，而是随证据积累能够解释**何时、为何、如何改变**的科学认识。
 
-**Scientific Knowledge Evolution**：新论文/实验 → 可信 Claim → 关系审查 → Topic 当前认识 → 候选 Gap 事件 → 必要时研究者科学决定。新证据可支持、挑战、收窄、合并、拆分，也可 NO_MATERIAL_CHANGE。
+## A. 科学知识演化
 
-**Expert Protocol Evolution**：经核实的失败/新方法 → Candidate Rule Change（旧规则、证据、适用条件）→ Gold Set 回归 → 关键方法学规则由研究者批准 → 版本发布。论文观点和未审查的提示注入永不自动修改专家规则。
+新论文、实验或纠错 → 核对 Paper/Evidence → 提取有限范围内的 Claim → 审查支持/挑战/限定关系 → 更新 Topic 的候选认识 → 记录 Gap 证据事件 → 必要时提交研究者审批。
 
-## 反证事件
+三件事不可混淆：
+- **COUNTEREVIDENCE_FOUND**：发现挑战旧认识的证据。
+- **SCOPE_REFINED**：在理解新旧证据后，建议改变旧认识的适用范围。
+- **NO_MATERIAL_CHANGE**：新证据没有要求改变当前结论。
 
-`COUNTEREVIDENCE_FOUND` 是证据事件；`SCOPE_REFINED` 是基于证据对 Gap 表述提出的修订。它们可以先后发生但不能由字符串差异等同。合成输入可提供 `candidate_gaps[].evidence_change`，其 kind 为 `COUNTEREVIDENCE_FOUND` 时，必须指向 `CHALLENGES` Claim、明确科学理由；更新旧 Gap 时单独记账，重大表述变化 PENDING_HUMAN。自动结构验证并不等于该反证已经被科学独立核验。
+重要科学论断必须保留 Before/After、原来源、修订理由、争议、状态和研究者决定。历史可以被指出错误，不应被静默重写。Gap 可保留候选、收窄、归档、合并或拆分；不能仅凭新增论文就宣布新颖或失效。
 
-## Scientific Failure & Correction Registry
+## B. 专家规则演化
 
-每个经核实的科研错误记录：错误主张、原始来源、为何错误、科学推断类型、反例、修复候选、相应回归案例、审查者与状态。不得让失败案例自行提升为普适规则。重要规则变更由研究者批准。
+如果真正发现 PRKE 的科学推理方式存在可复现错误，另外记录：旧规则、失败案例、原因、适用条件、候选规则修订和可复现回归题目。先做隔离评估，关键证据标准和通用方法学协议必须由研究者批准才正式修改。
+
+**领域观点更新不等于方法学规则更新。** 不能让网页、论文提示或一个自检结果直接重写专家规则；不能用同一模型的一致意见冒充外部科学真值。
+
+结构脚本与知识事件账本支持候选记录及部分恢复，但完整自动自我改进和可信正式写入尚需宿主集成与独立验收。

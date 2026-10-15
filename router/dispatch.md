@@ -1,18 +1,16 @@
-# Module Dispatcher — 按交付成果分派
+# Router｜让科研任务自然地使用正确能力
 
-| 用户主要要求 | 主路由 | 当前可执行状态 |
-| --- | --- | --- |
-| 检索论文、代表综述、科学/方法论文、数据/代码、资源与候选证据 | `acquire` | `INSTRUCTION_READY`（指令协议 + 实际宿主工具能力检测） |
-| 论文原文审阅、方法审查、具体 Figure 解读 | `understand` | `INSTRUCTION_READY`（宿主视觉能力 + 本地解析/核验工具） |
-| 既有知识检索、管理、正式入库与笔记 | `organize` | `INSTRUCTION_READY`（只读 Zotero + 受控本地 Vault 更新） |
-| 多篇证据综合、科学争议、Research Gap 及假设演化 | `synthesize` | `INSTRUCTION_READY`（宿主科研判断 + 本地证据结构/Gap 演化） |
+根据**当前要交付的科研成果**而非关键词数量决定主路线，必要时调用其他能力。Router 是协调方式，不是第五项科研工作。
 
-优先按最终交付物决定主模块；只有必要时加辅助模块。单纯语言翻译不应该触发科研 Skill。
+| 用户需要 | 首选能力 | 什么时候补充其他能力 |
+|---|---|---|
+| 了解某领域、找原始论文/方法/数据 | Acquire | 关键主张需要全文精读时转 Understand |
+| 解释特定论文、图表和统计方法 | Understand | 需要比对其他工作时补 Acquire / Synthesize |
+| 比较科学认识、寻找反证或研究问题 | Synthesize | 证据不够时返回 Acquire/Understand |
+| 利用或修订已有知识、整理材料 | Organize | 需要新的科学审查时转 Understand/Synthesize |
 
-## Router → 模块 → Router
+先检查已接入宿主的**实际工具能力**。`INSTRUCTION_READY` 只说明有协议；不能宣称 Undermind/PDF/子 Agent 已运行。复杂任务记录必要的论文身份、来源、访问等级、模块交接与剩余问题；简单问题直接回答即可。
 
-- 路由前读取 `router/interfaces/module-registry.json`，检查状态和外部工具权限。`INSTRUCTION_READY` 表示协议可读取，**不保证工具可用**；`NOT_CONNECTED` 不得假装已运行。
-- 向已接入模块提供符合 `schemas/router/module_request.schema.json` 的请求，并核实真实结果符合 `module_result` schema；其真实文献候选产物参见 `schemas/acquire/candidate_set.schema.json`。
-- Acquire 完成仅表示约定的文献**发现**阶段完成；不能把其元数据或摘要推荐当作原文核验或学术定论。只有显式调用具体工具并收到可检查结果后才可报告实际执行。Understand 仅在查看原图后才能记录视觉核验；Organize 已有明确授权的正式 Vault 批次写入工具，但 Router 默认 P0/P1；只有可信宿主取得具体授权才能调用 commit。
-- 无对应模块但有宿主独立工具时，可透明使用该工具完成用户任务，不得伪装成模块已连接；保留任务来源、证据状态与下一步限制。
-- 重大偏离 Mission/硬预算或正式权限时返回 Router 重新规划或征询用户。不能直接让子模块修改 Workspace 或正式知识库。
+同一任务可在不同能力间往返。模块报告的 `COMPLETED` 只表示其约定交付完成，不能自动代表科学论断被证明。用户未要求入库时无需启用 Organize 正式写入。正式资产操作遵守 `router/governance.md`。
+
+实际请求/结果可按 `schemas/router/module_request.schema.json`、`module_result.schema.json` 交接；有需要时用 `scripts/execution_core.py` 留下宿主报告，但其回执不是不可伪造的第三方证明。

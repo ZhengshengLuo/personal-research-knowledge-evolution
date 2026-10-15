@@ -19,11 +19,13 @@ def validate(p):
     for k in ('main_claim','main_evidence_refs','counterarguments','reviewer_verdict','review_method','review_evidence_refs'):
         if k not in p:raise ReviewError('缺少 '+k)
     if not isinstance(p['main_claim'],str) or len(p['main_claim'].strip())<15:raise ReviewError('主要科学主张不完整')
-    if not isinstance(p['main_evidence_refs'],list) or not p['main_evidence_refs']:raise ReviewError('缺少主分析证据')
+    if (not isinstance(p['main_evidence_refs'],list) or not p['main_evidence_refs'] or
+        any(not isinstance(x,str) or not x.strip() for x in p['main_evidence_refs'])):
+        raise ReviewError('主分析证据必须为非空来源引用列表')
     if p['reviewer_verdict'] not in VERDICTS or p['review_method'] not in METHOD:raise ReviewError('不支持的复核类型或结论')
-    if not isinstance(p['counterarguments'],list) or not p['counterarguments'] or any(not isinstance(a,dict) or not a.get('reason') for a in p['counterarguments']):
+    if not isinstance(p['counterarguments'],list) or not p['counterarguments'] or any(not isinstance(a,dict) or not isinstance(a.get('reason'),str) or not a['reason'].strip() for a in p['counterarguments']):
         raise ReviewError('反方审查必须有实际挑战或说明为何无法发现挑战')
-    if not isinstance(p['review_evidence_refs'],list):raise ReviewError('review_evidence_refs 必须为数组')
+    if not isinstance(p['review_evidence_refs'],list) or any(not isinstance(x,str) or not x.strip() for x in p['review_evidence_refs']):raise ReviewError('review_evidence_refs 必须为来源字符串列表')
     if p['review_method']=='SEPARATE_CONTEXT_AGENT':
         if not p.get('reviewer_execution_receipt') or not p.get('reviewer_source_access'):
             raise ReviewError('声称不同上下文子 Agent 审查必须有执行记录与独立来源访问声明')

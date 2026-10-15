@@ -5,7 +5,7 @@ using their real tools and hand back output. All host statements stay HOST_REPOR
 only local artifact byte integrity can be checked deterministically.
 """
 from __future__ import annotations
-import argparse, hashlib, json, os, re, sys, tempfile, uuid
+import argparse, hashlib, json, os, re, sys, tempfile, uuid, shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -24,13 +24,27 @@ def sha(path):
     return h.hexdigest()
 def read(path):return json.loads(Path(path).read_text(encoding='utf-8-sig'))
 def atomic_new(path,obj):
+    """Exclusive JSON creation without os.link (Windows-safe).
+
+    O_EXCL prevents overwrites; this is not a cross-file transaction or an
+    unforgeable receipt. A process killed during writing may leave an incomplete
+    file, so callers validate JSON on inspection and never infer success from
+    mere path existence.
+    """
     p=Path(path);p.parent.mkdir(parents=True,exist_ok=True)
-    fd,tmp=tempfile.mkstemp(dir=p.parent,prefix='.prke-',suffix='.tmp')
+    fd=os.open(str(p),os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
     try:
-        with os.fdopen(fd,'w',encoding='utf-8') as f:json.dump(obj,f,ensure_ascii=False,sort_keys=True,indent=2);f.write('\n');f.flush();os.fsync(f.fileno())
-        os.link(tmp,p) # exclusive creation prevents overwrite in a race
-    finally:
-        if os.path.exists(tmp):os.unlink(tmp)
+        with os.fdopen(fd,'w',encoding='utf-8') as f:
+            json.dump(obj,f,ensure_ascii=False,sort_keys=True,indent=2)
+            f.write('\n');f.flush();os.fsync(f.fileno())
+    except BaseException:
+        p.unlink(missing_ok=True)
+        raise
+
+def receipt_digest(data):
+    """Detect accidental receipt edits, NOT a digital signature/authentication."""
+    return digest({k:v for k,v in data.items() if k!='receipt_digest'})
+
 def safe_workspace(base):
     p=Path(base).expanduser().resolve()
     if p==Path(p.anchor):raise ExecutionError('工作区不可使用磁盘根目录')
@@ -63,8 +77,19 @@ def prepare(a):
          'input_digest':digest(packet),'inputs':packet,'status':'AWAITING_HOST_EXECUTION',
          'created_at':now(),'executor_provenance':'PRKE_REQUEST_ONLY',
          'note':'准备调用的记录并非实际工具调用；不得声称已执行。'}
-    action.mkdir(parents=True,exist_ok=False)
-    atomic_new(action/'request.json',doc)
+    # Prepare a complete request outside its public action path.  A failure
+    # before publication leaves no broken action ID; an existing action is
+    # never overwritten.  The final same-parent directory rename is atomic on
+    # ordinary local filesystems, not a distributed transactional guarantee.
+    actions=workspace/'actions';actions.mkdir(parents=True,exist_ok=True)
+    staging=actions/('.prepare-'+uid+'-'+uuid.uuid4().hex)
+    staging.mkdir(exist_ok=False)
+    try:
+        atomic_new(staging/'request.json',doc)
+        if action.exists():raise ExecutionError('action 已存在，不能覆盖')
+        os.rename(staging,action)
+    finally:
+        if staging.exists():shutil.rmtree(staging)
     print(json.dumps({'status':'AWAITING_HOST_EXECUTION','action_id':uid,'request':str(action/'request.json'),
                        'next':'宿主必须真实调用工具，然后提供 host-result.json 并执行 finalize'},ensure_ascii=False))
 
@@ -91,15 +116,20 @@ def finalize(a):
         files.append({'path':str(path),'sha256':sha(path),'bytes':path.stat().st_size})
     if result['status']=='HOST_REPORTED_SUCCESS' and not result.get('provider_result_ref') and not files:
         raise ExecutionError('声称成功必须提供可核对的 provider_result_ref 或实际产物')
+    provenance=result.get('source_provenance',[])
+    if (not isinstance(provenance,list) or
+        any(not isinstance(x,(str,dict)) for x in provenance)):
+        raise ExecutionError('source_provenance 必须是列表，元素为来源字符串或对象')
     receipt={'schema_version':'1.0','action_id':a.action_id,'task_id':req['task_id'],
         'capability_id':req['capability_id'],'provider':provider,'input_digest':req['input_digest'],
         'result_digest':digest(output),'status':result['status'],'artifacts':files,
         'provider_result_ref':result.get('provider_result_ref'),
-        'source_provenance':result.get('source_provenance',[]), 'finished_at':now(),
+        'source_provenance':provenance, 'finished_at':now(),
         'execution_assurance':'HOST_REPORTED_UNVERIFIED',
         'local_artifact_integrity':'CHECKED' if files else 'NOT_AVAILABLE',
         'scientific_verification':'NOT_ASSESSED',
         'warning':'宿主结果由调用方报告，非不可伪造证明；产物 SHA 仅核验本地字节。'}
+    receipt['receipt_digest']=receipt_digest(receipt)
     atomic_new(action/'receipt.json',receipt)
     print(json.dumps({'action_id':a.action_id,'status':receipt['status'],'execution_assurance':receipt['execution_assurance'],
                       'artifact_integrity':receipt['local_artifact_integrity'],'receipt':str(action/'receipt.json')},ensure_ascii=False))
@@ -112,9 +142,13 @@ def inspect(a):
     if not p.exists():
         doc=read(action/'request.json');print(json.dumps({'action_id':a.action_id,'status':doc['status'],
           'instruction':'检查宿主外部 job 后再 finalize；不要盲目重试有副作用的动作'},ensure_ascii=False));return
-    r=read(p);bad=[f['path'] for f in r['artifacts'] if not Path(f['path']).is_file() or sha(f['path'])!=f['sha256']]
+    r=read(p)
+    bad=[f['path'] for f in r['artifacts'] if not Path(f['path']).is_file() or sha(f['path'])!=f['sha256']]
+    stored_digest=r.get('receipt_digest')
+    receipt_check='LOCAL_DIGEST_MATCH' if stored_digest and stored_digest==receipt_digest(r) else 'MISMATCH_OR_LEGACY'
     print(json.dumps({'action_id':a.action_id,'status':r['status'],'execution_assurance':r['execution_assurance'],
        'artifact_integrity':'MISMATCH' if bad else r['local_artifact_integrity'],'bad_artifacts':bad,
+       'receipt_integrity':receipt_check,'receipt_authentication':'NOT_AUTHENTICATED',
        'scientific_verification':r['scientific_verification']},ensure_ascii=False))
 
 def main(argv=None):

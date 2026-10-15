@@ -1,17 +1,19 @@
-# PRKE 1.6.0-integration-preview — 当前真实能力矩阵
+# PRKE 1.7.0｜当前真实能力边界
 
-| 能力 | 本包当前状态 | 未验证的部分 |
+本表区分**本地实现与测试**、**依赖宿主真正执行**、**尚未完成的科研验收**。版本更新不是 G1–G3 自动通过。
+
+| 能力 | 当前能验证的事实 | 尚需真实验收的部分 |
 |---|---|---|
-| 一个 SKILL.md 与四模块入口 | IMPLEMENTED, OFFLINE_TESTED | Codex/Antigravity 实际触发与 S0 科学效果 |
-| Scientific Reasoning + 专家协议 | IMPLEMENTED (instruction) | 多学科独立 Gold Set |
-| P0/P1 Host Handoff + file receipts | OFFLINE_TESTED (synthetic) | 真实宿主 provider 调用与不可伪造身份 |
-| DOI/arXiv/PDF 版本保守识别 | OFFLINE_TESTED (synthetic) | 大规模不同版本识别准确率 |
-| Claim/Evidence/Relation 候选验证 | OFFLINE_TESTED (structural) | 科学语义准确性与跨模块事务存储 |
-| Scientific Critic 校验合同 | OFFLINE_TESTED (structural) | 独立子 Agent 在用户实际宿主上的质量/身份独立性 |
-| Gap 反证 vs 范围修订分离 | OFFLINE_TESTED (synthetic) | 真实科学反证和人工决策全过程 |
-| Method/Data AI 笔记模板修复 | OFFLINE_TESTED (synthetic) | Obsidian Windows 实机呈现 |
-| 已有 PDF / Organize / 受控提交 CLI | 原版与新增测试 OFFLINE_TESTED | 正式 Vault ACL 隔离、可靠身份鉴别 |
-| 外部学术检索 / PDF 科学审查 | HOST_DEPENDENT | 未端到端验收；无内置第三方 API 凭据 |
-| 原生 24h Worker | NOT_IMPLEMENTED | 后台部署、真实 soak |
-| 可信正式 Vault 无人值守写入 | BLOCKED_FOR_PRODUCTION | Windows/受信宿主独立执行身份与审计 |
-| S1–S6 和 G1–G3 | NOT_RUN | 独立人工 Gold Set 和实际系统集成 |
+| 单入口 + 四科研模块 | 入口与任务规范、数据结构已完整，离线测试通过 | Codex/Antigravity 技能发现、自动路由 S0–S4 |
+| 科研规划与专家协议 | 已按科研任务和证据重写主 Skill、四路线、科学核心 | 模型自主规划质量与跨任务可靠性 |
+| 实际学术检索与 PDF | 有宿主交接及本地解析/渲染工具；前次验收真实调用过 Undermind/PDF 读文本 | 当前版本宿主自动调用、主要 Figure 像素审查 |
+| 论文身份和科学语义 | 有 DOI/文件候选身份、Claim/Evidence/Relation 结构校验；未注册目标保守暂缓 | 真实来源、时间支持、推断正确性与独立审查 |
+| Host Handoff 与本地回执 | 修复硬链接依赖；请求准备、独占创建、产物/回执字节校验有离线测试 | 外部 job 的真实性、签名认证、分布式并发与中断一致性 |
+| Scientific Critic | 有反方协议与声明校验；不假装自检等于独立审查 | 宿主真子 Agent、独立来源访问、盲评科学质量 |
+| Synthesize 与 Gap | 有证据矩阵、研究分歧和 Gap 暂存、部分演化账本 | 跨论文科研真值、完整反证与新颖性检索 |
+| Organize 与 Zotero/Obsidian | 本地 staging、回滚、测试 Vault 工具与 Zotero 只读适配 | Windows 实机接入、生产 ACL、可信独立人类审批 |
+| 持久任务 | 有局部检查点及触发工具 | 真正后台 Worker、24h soak 与异常恢复 |
+| 工程回归 | 本次容器 Python 3.13：137/137 离线测试通过，含新增 9 项 | Windows/Python 3.10/3.12 实机和本版远端 CI |
+| 科研质量 G2 | 有真实论文案例的既有审查及问题登记 | 独立、未见过的 10–20 篇 Gold Set 评分与公平对照 |
+
+**禁止的完成声明：** 不声称正式 Zotero/Obsidian 已连接、正式知识库可无人值守提交、原始图像已实际查看、独立科学质量已验证、离开会话仍可后台工作。每次科研任务分别报告实际行动、科学核验与正式保存三种状态。

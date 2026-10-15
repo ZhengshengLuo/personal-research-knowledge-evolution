@@ -1,23 +1,24 @@
-# Synthesize｜跨论文科学综合与 Research Gap Evolution（v1.5.0-rc1）
+# Synthesize｜比较证据，生成有边界的新认识
 
-执行本路由前阅读 `SKILL.md`、`references/synthesize/evidence-and-gap-gates.md` 与相关 Router 协议，避免自动补造证据。
+**使命：** 回答“研究之间真正一致或矛盾的是什么？我们能据此相信什么？下一项最有价值的验证是什么？”不按支持论文数量投票，也不为凑成果而制造 Research Gap。
 
-## 模式
-- `TOPIC_INCREMENTAL`：由 Organize 对某 Topic 新增 ≥10 篇去重有效 Paper UID 或核验的重大反证触发，对**旧+新**证据复核；允许 `NO_MATERIAL_CHANGE`，不得强制制造 Idea。
-- `FOCUSED_SYNTHESIS`：围绕指定 Research Question 的科研综合；检索边界和论文质量说明清楚。
-- `SYSTEMATIC_REVIEW`：需要用户确认检索方案/范围与真实筛选审计；默认无法直接声称完成发表级系统综述。
+## 科学综合的次序
 
-## 工作流
-1. 确认任务、Topic、论文来源版本及可用原文证据。优先从 Organize、Understand 获得经过审查的 claim-evidence；资料不足时请求 Acquire。
-2. 建立统一 Evidence Matrix；记录可比性、重复使用数据、研究设计、估计目标和来源定位。科学主张的强度不超过原始证据。
-3. 由宿主科研 Agent 对同一问题下的证据开展定性综合。不得凭相同方向数量简单表决；区分作者解释、Agent 解读和研究者判断。
-4. 分析真实冲突与表面差异。针对重要争议有界检索相关原始研究，保留搜索式、数据库、时间与未获得的 PDF 清单。
-5. Gap Discovery 的每个候选必须有支持证据，提交 closest prior work 和反证搜索记录，缺项标 PARTIAL。
-6. 使用 `scripts/synthesize_cli.py stage --input <reviewed_evidence_packet.json> --output <new_stage_dir>` 生成不写正式库的结构化综合草稿。其科研解释是待人审底稿，不是 AI 自动完成的独立科学验证。
-7. 若涉及 Gap 演化，经 `scripts/knowledge_cli.py` 在库外 stage 生成 Topic 管理区/Gap Overview/append-only Ledger；**提交须显式批准计划 sha 与受控写入**，重大修改需要额外的人类批准，不能将 CLI ack 当成身份认证。
-8. 结果通过 Router 现有 `module_result` 的 COMPLETED/PARTIAL/BLOCKED 反馈；模块自己须保留独立科学质量状态。
+1. **确定同一个问题**：先区分描述、相关、预测、因果和机制；给每个主要结论明确估计目标。
+2. **检查可比性**：研究对象、变量构念、时间/空间支持、产品及传感器、实验设计、统计处理与共享数据是否一致。
+3. **逐项对照证据**：区分直接支持、间接机制线索、真实冲突、研究范围限定、未测试和不可比较。
+4. **解释分歧**：优先审查混杂、测量与检索误差、模型条件、选择偏差、处理定义和结果外推，再判断是否存在机制冲突。
+5. **寻找反证**：沿最接近的已有研究追查，真正审查可能推翻自己结论的证据；争议和重大因果判断按 `references/scientific-core/critic.md` 复核。
+6. **形成可检验判断**：陈述现有证据足以支持的结论，明确失效条件，并提出能够区分竞争解释的最小验证任务。
 
-## 限制
-- 当前本地工具不实现独立的语义大模型审稿、自动外部检索或通过真正用户身份签名的审批服务；这些由宿主已授权 Agent/工具协作完成，实测结果分别标记。
-- 未经科研者明确同意，不向外部传输内部实验、未公开手稿和受限 PDF。
-- 调度器的独立 Windows 后台运行需另行授权，不能假装聊天会话退出后自动继续。
+## Research Gap 不是新颖性宣言
+
+候选 Gap 至少包含：研究对象与问题、现有最接近工作、真正未解决的部分、反证检索的范围、可证伪的假设、验证设计及否证条件。结论可以是“已有研究覆盖了这个问题，未发现可靠新 Gap”。未完成反证检索时保持 `PARTIAL/UNCONFIRMED`。
+
+## 什么时候更新旧知识
+
+新证据可以支持、挑战或收窄既有 Topic/Claim，也可能没有实质改变。**COUNTEREVIDENCE_FOUND** 是证据事件，**SCOPE_REFINED** 才是拟修改表述的科学决定；不得将二者等同。重要修订进入 Organize 的暂存与研究者确认流程。
+
+## 交付与工具
+
+首先给出可阅读的研究结论、主要证据、竞争性解释、关键不足和可执行下一步。需要长期记录时，再保存 Evidence Matrix、Disagreements、Candidate Gap 和候选知识更新。`scripts/synthesize_cli.py` 可检查结构并生成草稿，**不能自行判断论点为真，也不执行外部检索**。按需阅读 `references/experts/tasks/synthesize.md` 与 `references/scientific-core/source-to-claim.md`。
